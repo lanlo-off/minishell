@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   token.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 15:57:14 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/24 15:05:22 by llechert         ###   ########.fr       */
+/*   Created: 2025/11/24 16:01:34 by llechert          #+#    #+#             */
+/*   Updated: 2025/11/24 16:31:36 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	main(int ac, char **av, char **envp)
+void	create_token(t_token_type type, char *value, t_token *token)
 {
-	t_shell	shell;
-	int		exit_code;
-	
-	(void)av;
-	if (ac != 1)
-	{
-		printf("./minishell to launch the program");
-		return (0);
-	}
-	init_structs(&shell, envp);
-	exit_code = infinite_loop(&shell);
-	rl_clear_history();
-	clean_shell(&shell);
-	return(exit_code);
+	t_token	*new;
+
+	new = malloc(sizeof(t_token));
+	if (!new)
+		return (NULL);
+	new->type = type;
+	new->full_token = value;
+	new->subword = NULL;
+	ft_lstadd_back(&token, new);
 }

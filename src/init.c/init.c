@@ -1,31 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 15:57:14 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/24 15:05:22 by llechert         ###   ########.fr       */
+/*   Created: 2025/11/24 14:39:38 by llechert          #+#    #+#             */
+/*   Updated: 2025/11/24 15:03:03 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int	main(int ac, char **av, char **envp)
+void	init_signals(shell)
 {
-	t_shell	shell;
-	int		exit_code;
 	
-	(void)av;
-	if (ac != 1)
-	{
-		printf("./minishell to launch the program");
-		return (0);
-	}
-	init_structs(&shell, envp);
-	exit_code = infinite_loop(&shell);
-	rl_clear_history();
-	clean_shell(&shell);
-	return(exit_code);
+}
+
+void	init_structs(t_shell *shell, char **envp)
+{
+	if (!shell)
+		return ;
+	ft_bzero(shell, sizeof(t_shell));
+	shell->env = get_env(envp);
+	shell->exit_code = EXIT_SUCCESS;
+	init_signals(shell);//a voir avec cscarti
 }
