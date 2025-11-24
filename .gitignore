@@ -1,6 +1,9 @@
 #executables
 minishell
 
+#pipex
+2.1 pipex
+
 # Prerequisites
 *.d
 
