@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:24:23 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 15:39:24 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/26 18:44:32 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,35 @@
 
 bool	handle_operator(t_lexer *lexer, char *line, t_token **token_lst)
 {
-	int i;
+	t_token_type	type;
 
-	i = lexer->pos;
-	if (line[i] == '|' && !save_token(lexer, token_lst, PIPE))
+	
+	if (!append_to_buffer(lexer, line[lexer->pos]))
 		return (false);
-	if (line[i] == '<')
+	
+	// Vérifier les opérateurs à 2 caractères (>> ou <<)
+	if ((line[lexer->pos] == '>' || line[lexer->pos] == '<') 
+		&& line[lexer->pos + 1] == line[lexer->pos])
 	{
-		if (line[i + 1] == line[i] && !save_token(lexer, token_lst, HEREDOC))
+		if (!append_to_buffer(lexer, line[lexer->pos]))
 			return (false);
-		else if (!save_token(lexer, token_lst, REDIR_IN))
-			return (false);
+		lexer->pos++;
 	}
-	if (line[i] == '>')
-	{
-		if (line[i + 1] == line[i] && save_token(lexer, token_lst, APPEND))
-			return (false);
-		else if (!save_token(lexer, token_lst, REDIR_OUT))
-			return (false);
-	}
+	
+	// Déterminer le type d'opérateur
+	if (lexer->buffer[0] == '|')
+		type = PIPE;
+	else if (ft_strlen(lexer->buffer) == 2 && lexer->buffer[0] == '<')
+		type = HEREDOC;
+	else if (ft_strlen(lexer->buffer) == 2 && lexer->buffer[0] == '>')
+		type = APPEND;
+	else if (lexer->buffer[0] == '<')
+		type = REDIR_IN;
+	else
+		type = REDIR_OUT;
+	
+	// Réutiliser save_token
+	if (!save_token(lexer, token_lst, type))
+		return (false);
 	return (true);
 }

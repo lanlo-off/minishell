@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 10:43:27 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 17:50:25 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/26 19:04:00 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,31 @@ bool	append_to_buffer(t_lexer *lexer, char c)
 	
 	if (!lexer->buffer)//si pas encore de buffer cree
 	{
+		printf("Je cree le buffer\n\n");
 		lexer->buffer = malloc(2);
 		if (!lexer->buffer)
 			return (false);
 		lexer->buffer[0] = c;
-		lexer->buffer[0] = 0;
+		lexer->buffer[1] = 0;
 		lexer->buffer_size = 2;
 		return (true);
 	}
-	if ((int)ft_strlen(lexer->buffer) > lexer->buffer_size)//si plus de place dans le buffer
+	if ((int)ft_strlen(lexer->buffer) + 1 >= lexer->buffer_size)//si plus de place dans le buffer
 	{
+		printf("mon buffer fait la taille %i\n", lexer->buffer_size);
 		lexer->buffer_size *= 2;
+		printf("mais j'ai besoin de doubler, il fait donc %i\n", lexer->buffer_size);
 		new_buffer = malloc(lexer->buffer_size);
 		if (!new_buffer)
 			return (false);
-		ft_strcpy(lexer->buffer, new_buffer);//a faire proprement
+		printf("Je vais copier mon ancien buffer au debut du nouveau : %s\n", lexer->buffer);
+		ft_bzero(new_buffer, lexer->buffer_size);
+		ft_strcpy(new_buffer, lexer->buffer);//a faire proprement
 		free(lexer->buffer);
 		lexer->buffer = new_buffer;
+		printf("Mon nouveau lexer->buffer est donc : %s\n", lexer->buffer);
 	}
+	printf("j'append le carac suivant a l'indice %zu buffer du lexer : %c\n\n", ft_strlen(lexer->buffer), c);
 	lexer->buffer[ft_strlen(lexer->buffer)] = c;//on append le charactere
 	lexer->buffer[ft_strlen(lexer->buffer) + 1] = 0;//on termine pour pouvoir manipuler correctement le token plus tard
 	return (true);

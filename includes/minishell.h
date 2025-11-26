@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 17:50:53 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/26 18:29:39 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_env	*get_env(char **envp);
 /*=============== LEXER =============== */
 /*lexer.c*/
 bool	lexer(t_shell *shell, char *line);
+bool	append_to_buffer(t_lexer *lexer, char c);
 bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 
 /*lexer_utils.c*/
