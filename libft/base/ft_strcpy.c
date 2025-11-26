@@ -1,31 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/20 15:57:14 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 17:37:31 by llechert         ###   ########.fr       */
+/*   Created: 2025/03/31 16:27:04 by llechert          #+#    #+#             */
+/*   Updated: 2025/11/26 16:28:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../libft.h"
 
-int	main(int ac, char **av, char **envp)
+char	*ft_strcpy(char *dest, char *src)
 {
-	t_shell	shell;
-	int		exit_code;
-	
-	(void)av;
-	if (ac != 1)
+	int	i;
+
+	i = 0;
+	while (src[i])
 	{
-		printf("./minishell to launch the program");
-		return (0);
+		dest[i] = src[i];
+		i++;
 	}
-	init_structs(&shell, envp);
-	exit_code = infinite_loop(&shell);
-	rl_clear_history();
-	// clean_shell(&shell);
-	return(exit_code);
+	dest[i] = '\0';
+	return (dest);
 }

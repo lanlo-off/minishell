@@ -1,8 +1,16 @@
 SRCS = src/main.c\
+	src/exec/loop.c\
+	src/init/init.c\
+	src/lexer/lexer_utils.c\
+	src/lexer/lexer.c\
+	src/lexer/operators.c\
+	src/lexer/split_token.c
+#	src/init/get_env.c
+#	src/clean_exit/clean.c
 
 OBJS_DIR = obj
 
-OBJS = $(SRCS:src/%.c=$(OBJS_DIR)/%.o)
+OBJS = $(SRCS:src/%/%.c=$(OBJS_DIR)/%.o)
 
 NAME = minishell
 
@@ -15,9 +23,9 @@ CFLAGS = -Wall -Wextra -Werror -g3
 
 LIBFT = libft/libft.a
 
-valgrind-clean: $(NAME)
-	@echo "=== Valgrind without readline leaks ==="
-	-valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes --suppressions=readline.supp ./$(NAME)
+#valgrind-clean: $(NAME)
+#	@echo "=== Valgrind without readline leaks ==="
+#	-valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes --suppressions=readline.supp ./$(NAME)
 
 all: $(NAME)
 
@@ -25,7 +33,7 @@ $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
 $(NAME): $(LIBFT) $(OBJS) 
-	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lreadline -o $(NAME)
 
 $(OBJS_DIR)/%.o: src/%.c $(HEADER) | $(OBJS_DIR)
 	$(CC) -I./libft $(CFLAGS) -c $< -o $@

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
+/*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/24 15:55:37 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/26 17:43:57 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_lexer
 {
 	char		*source;//chaine entree dans minishell
 	int			pos;//index
+	char		*buffer;
+	int			buffer_size;
 	t_lex_state	state;
 	bool		lex_error;
 }	t_lexer;
@@ -50,12 +52,14 @@ typedef enum e_sub_type
 	SUB_DQUOTED,
 }	t_sub_type;
 
-typedef struct s_subword
+typedef struct s_subword t_subword;
+
+struct s_subword
 {
 	t_sub_type	type;
 	char		*val;
 	t_subword	*next;
-}	t_subword;
+};
 
 typedef struct s_token
 {
@@ -80,7 +84,7 @@ typedef struct s_env
 typedef struct s_shell
 {
 	t_env	*env;
-	char	**av;
+	char	*av;//input
 	t_token	*token;
 	int		exit_code;
 }	t_shell;
