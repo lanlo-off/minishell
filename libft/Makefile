@@ -9,6 +9,7 @@ SRCS_A = base/ft_isalpha.c \
 	base/ft_memcpy.c \
 	base/ft_memmove.c \
 	base/ft_strlcpy.c \
+	base/ft_strcpy.c \
 	base/ft_strlcat.c \
 	base/ft_toupper.c \
 	base/ft_tolower.c \

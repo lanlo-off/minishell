@@ -1,0 +1,2 @@
+ < infile "cat -e" oui'enfin"bon"'"ca" "va oui" > outfile | cat -e >>
+-> le "cat -e" et "va oui" ne genere pas de subword
