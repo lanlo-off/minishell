@@ -1,9 +1,13 @@
 SRCS = src/main.c\
+	src/print_token.c\
 	src/exec/loop.c\
 	src/init/init.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
 	src/lexer/operators.c\
+	src/lexer/quotes.c\
+	src/lexer/split_sub_utils.c\
+	src/lexer/split_subwords.c\
 	src/lexer/split_token.c
 #	src/init/get_env.c
 #	src/clean_exit/clean.c

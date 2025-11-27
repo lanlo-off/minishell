@@ -6,89 +6,47 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 10:43:27 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 19:04:00 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:38:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/**
- * @brief Ajoute le char envoye au buffer du lexer
- * Checke si le buffer existe ou pas
- * Si plus de place dans le buffer, on l'agrandit en faisant size *2
- * 
- * @param lexer 
- * @param c char envoye
- * @return true tout s'est bien passe
- * @return false pb de malloc
- */
-bool	append_to_buffer(t_lexer *lexer, char c)
+static bool	handle_default_tok(t_shell *shell, char *line, t_lexer *lexer)
 {
-	char	*new_buffer;
-	
-	if (!lexer->buffer)//si pas encore de buffer cree
+	char	c;
+
+	c = line[lexer->pos];
+	if (is_operator(c))
 	{
-		printf("Je cree le buffer\n\n");
-		lexer->buffer = malloc(2);
-		if (!lexer->buffer)
+		if (!save_token(lexer, &shell->token, WORD))//d'abord on recupere le token juste avant l'operateur (si vide rien ne se cree)
 			return (false);
-		lexer->buffer[0] = c;
-		lexer->buffer[1] = 0;
-		lexer->buffer_size = 2;
+		if (!handle_operator(lexer, line, &shell->token))//ensuite on fait le token avec l'operateur
+			return (false);
 		return (true);
 	}
-	if ((int)ft_strlen(lexer->buffer) + 1 >= lexer->buffer_size)//si plus de place dans le buffer
-	{
-		printf("mon buffer fait la taille %i\n", lexer->buffer_size);
-		lexer->buffer_size *= 2;
-		printf("mais j'ai besoin de doubler, il fait donc %i\n", lexer->buffer_size);
-		new_buffer = malloc(lexer->buffer_size);
-		if (!new_buffer)
-			return (false);
-		printf("Je vais copier mon ancien buffer au debut du nouveau : %s\n", lexer->buffer);
-		ft_bzero(new_buffer, lexer->buffer_size);
-		ft_strcpy(new_buffer, lexer->buffer);//a faire proprement
-		free(lexer->buffer);
-		lexer->buffer = new_buffer;
-		printf("Mon nouveau lexer->buffer est donc : %s\n", lexer->buffer);
-	}
-	printf("j'append le carac suivant a l'indice %zu buffer du lexer : %c\n\n", ft_strlen(lexer->buffer), c);
-	lexer->buffer[ft_strlen(lexer->buffer)] = c;//on append le charactere
-	lexer->buffer[ft_strlen(lexer->buffer) + 1] = 0;//on termine pour pouvoir manipuler correctement le token plus tard
-	return (true);
+	else if (c == ' ')
+		return (save_token(lexer, &shell->token, WORD));
+	else if (c == '\'')
+		lexer->state = SQUOTE;
+	else if (c == '"')
+		lexer->state = DQUOTE;
+	return (append_to_buffer(lexer, c));
 }
 
-/**
- * @brief Verifie si buffer existe ou n'est pas vide (evite de tokeniser les espaces)
- * Puis duplique le buffer du lexer pour faire un vrai token et l'ajouter a la liste
- * Cleane le lexer pour preparer le prochain token
- * 
- * @param lexer 
- * @param token envoyer la tete de liste
- * @param type de token qu'on veut creer
- * @return true si creation de token ou si rien a cree
- * @return false si pb de malloc
- */
-bool	save_token(t_lexer *lexer, t_token **token, t_token_type type)
+static bool	handle_squote_tok(char *line, t_lexer *lexer)
 {
-	t_token	*new;
-
-	if (!lexer->buffer || lexer->buffer[0] == 0)//si pas de buffer ou si buffer vide
-		return (true);//on renvoie vrai mais on cree rien (par ex si 2 espaces de suite dans l'input)
-	new = malloc(sizeof(t_token));
-	if (!new)
-		return (false);
-	new->type = type;
-	new->full_token = ft_strdup(lexer->buffer);
-	new->subword = NULL;
-	new->next = NULL;
-	token_add_last(new, token);
-	free(lexer->buffer);//on cleane le lexer pour passer au prochain token
-	lexer->buffer = NULL;
-	lexer->buffer_size = 0;
-	return (true);
+	if (line[lexer->pos] == '\'')
+		lexer->state = DEFAULT;
+	return (append_to_buffer(lexer, line[lexer->pos]));
 }
 
+static bool	handle_dquote_tok(char *line, t_lexer *lexer)
+{
+	if (line[lexer->pos] == '"')
+		lexer->state = DEFAULT;
+	return (append_to_buffer(lexer, line[lexer->pos]));
+}
 /**
  * @brief Separe l'input en tokens et gere le statut du lexer
  * Separe en fonction des operateurs et espaces en dehors des quotes
@@ -101,49 +59,23 @@ bool	save_token(t_lexer *lexer, t_token **token, t_token_type type)
  * @return true 
  * @return false 
  */
-bool	split_token(t_shell *shell, char *line, t_lexer *lexer)
+static bool	split_token(t_shell *shell, char *line, t_lexer *lexer)
 {
 	while (line[lexer->pos])
 	{
-		if (lexer->state == DEFAULT && is_operator(line[lexer->pos]))
+		if (lexer->state == DEFAULT)
 		{
-			if (!save_token(lexer, &shell->token, WORD))//d'abord on recupere le token juste avant l'operateur (si vide rien ne se cree)
-				return (false);
-			if (!handle_operator(lexer, line, &shell->token))//ensuite on fait le token avec l'operateur
+			if (!handle_default_tok(shell, line, lexer))
 				return (false);
 		}
-		else if (lexer->state == DEFAULT && line[lexer->pos] == ' ')
+		else if (lexer->state == SQUOTE)
 		{
-			if (!save_token(lexer, &shell->token, WORD))
+			if (!handle_squote_tok(line, lexer))
 				return (false);
 		}
-		else if (lexer->state == DEFAULT && line[lexer->pos] == '\'')
+		else if (lexer->state == DQUOTE)
 		{
-			lexer->state = SQUOTE;
-			if (!append_to_buffer(lexer, line[lexer->pos]))
-				return (false);
-		}
-		else if (lexer->state == DEFAULT && line[lexer->pos] == '"')
-		{
-			lexer->state = DQUOTE;
-			if (!append_to_buffer(lexer, line[lexer->pos]))
-				return (false);
-		}
-		else if (lexer->state == SQUOTE && line[lexer->pos] == '\'')
-		{
-			lexer->state = DEFAULT;
-			if (!append_to_buffer(lexer, line[lexer->pos]))
-				return (false);
-		}
-		else if (lexer->state == DQUOTE && line[lexer->pos] == '"')
-		{
-			lexer->state = DEFAULT;
-			if (!append_to_buffer(lexer, line[lexer->pos]))
-				return (false);
-		}
-		else if (line[lexer->pos] != ' ')
-		{
-			if (!append_to_buffer(lexer, line[lexer->pos]))
+			if (!handle_dquote_tok(line, lexer))
 				return (false);
 		}
 		lexer->pos++;
@@ -173,9 +105,9 @@ bool	lexer(t_shell *shell, char *line)
 	lexer.source = line;
 	if (!split_token(shell, lexer.source, &lexer))//split en token, voir si besoin de protection en l'ecrivant
 		return (false);
-	// if (!check_quotes(shell->token))//verifie que chaque quote a bien sa complementaire pour se refermer (sauf les quotes dans les quotes)
-	// 	return (false);
-	// if (!split_subwords(shell->token))//split les mots en subword
-	// 	return (false);
+	if (!check_quotes(&shell->token))//verifie que chaque quote a bien sa complementaire pour se refermer (sauf les quotes dans les quotes)
+		return (false);
+	if (!split_subwords(&shell->token))//split les mots en subword
+		return (false);
 	return (true);
 }

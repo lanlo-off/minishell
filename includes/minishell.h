@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 18:29:39 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:42:20 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,48 @@ void	init_structs(t_shell *shell, char **envp);
 t_env	*get_env(char **envp);
 
 
+
+
 /*=============== LEXER =============== */
 /*lexer.c*/
 bool	lexer(t_shell *shell, char *line);
+
+/*operators.c*/
+bool	is_operator(char c);
+bool	handle_operator(t_lexer *lexer, char *line, t_token **token_lst);
+
+/*quotes.c*/
+bool	check_quotes(t_token **token_list);
+
+/*split_sub_utils.c*/
+void	set_sub_manager(t_sub_manager *man, char *str, t_token *token);
+bool	handle_default_sub(t_sub_manager *man);
+bool	handle_squote_sub(t_sub_manager *man);
+bool	handle_dquote_sub(t_sub_manager *man);
+
+/*split_subwords.c*/
+bool	split_subwords(t_token **token_list);
+bool	create_sub(t_token *token, int end, int *length, t_sub_type type);
+
+/*split_token.c*/
+//void	token_add_last(t_token *new, t_token **list);
+//bool	create_buffer_append(t_lexer *lexer, char c);
 bool	append_to_buffer(t_lexer *lexer, char c);
 bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 
-/*lexer_utils.c*/
-void	token_add_last(t_token *new, t_token **list);
-bool	is_operator(char c);
-bool	check_quotes(t_lexer *lexer, char c);
 
-/*operators.c*/
-bool	handle_operator(t_lexer *lexer, char *line, t_token **token_lst);
 
 /*=============== PARSER =============== */
+
+
 
 /*=============== EXEC =============== */
 /*loop.c*/
 int	infinite_loop(t_shell *shell);
 
+
+
+
+/*=============== DEBUG A VIRER AVANT PUSH =============== */
+void	print_tokens(t_token *token);
 #endif

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 17:43:57 by llechert         ###   ########.fr       */
+/*   Updated: 2025/11/27 18:04:12 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 typedef enum e_lex_state
 {
 	DEFAULT,
-	DQUOTE,
 	SQUOTE,
+	DQUOTE,
 }	t_lex_state;
 
 typedef struct s_lexer
@@ -65,9 +65,18 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*full_token;
-	t_subword		*subword;//null si pas un mot en nature
+	t_subword		*subword;//null si type != WORD
 	struct s_token	*next;
 }	t_token;
+
+typedef struct s_sub_manager//pour split les subwords
+{
+	char		*str;
+	t_token		*token;
+	int			pos;
+	int			sub_len;
+	t_lex_state	state;
+}	t_sub_manager;
 
 /*=============== ENV =============== */
 
