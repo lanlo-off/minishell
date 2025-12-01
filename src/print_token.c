@@ -1,8 +1,6 @@
-// ...existing code...
 #include "../includes/minishell.h"
 #include <stdio.h>
 
-/* helper: token type -> string */
 static const char *token_type_str(t_token_type type)
 {
     if (type == WORD)
@@ -20,7 +18,6 @@ static const char *token_type_str(t_token_type type)
     return ("UNKNOWN");
 }
 
-/* helper: subword type -> string */
 static const char *sub_type_str(t_sub_type st)
 {
     if (st == SUB_UNQUOTED)
@@ -32,7 +29,6 @@ static const char *sub_type_str(t_sub_type st)
     return ("UNKNOWN");
 }
 
-/* imprime tous les tokens et, pour chaque token, ses subwords */
 void	print_tokens(t_token *token)
 {
     t_token		*tk;
