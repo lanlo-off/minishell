@@ -1,13 +1,14 @@
 SRCS = src/main.c\
 	src/print_token.c
-
-SRCS += src/exec/loop.c\
+	src/exec/loop.c\
 	src/exec/clean_loop.c
-
-SRCS += src/init/init.c\
+	src/init/init.c\
 	src/init/get_env.c
-
-SRCS += src/lexer/clean_lexer.c\
+	src/lexer/clean_lexer.c\
+	src/print_token.c\
+	src/exec/loop.c\
+	src/init/init.c\
+	src/lexer/clean_lexer.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
 	src/lexer/operators.c\
@@ -15,12 +16,11 @@ SRCS += src/lexer/clean_lexer.c\
 	src/lexer/split_sub_utils.c\
 	src/lexer/split_subwords.c\
 	src/lexer/split_token.c\
-
-SRCS += src/parser/clean_parser.c\
+	src/parser/clean_parser.c\
 	src/parser/expand.c\
 	src/parser/expand_utils.c\
 	src/parser/parse.c\
-	src/parser/token_to_cmd.c\
+	src/parser/token_to_cmd.c
 
 
 OBJS_DIR = obj
