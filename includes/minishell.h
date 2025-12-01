@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:42:20 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:31:07 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,10 @@ t_env	*get_env(char **envp);
 
 
 /*=============== LEXER =============== */
+/*clean_lexer.c*/
+void	clean_lexer(t_shell *shell);
+void	clean_lexer_struct(t_lexer *lexer);
+
 /*lexer.c*/
 bool	lexer(t_shell *shell, char *line);
 

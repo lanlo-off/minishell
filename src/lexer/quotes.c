@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 11:46:22 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:33:11 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/01 15:16:12 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@ static t_lex_state	initiate_state(char c)
 	else if (c == '"')
 		return (DQUOTE);
 	return (DEFAULT);
+}
+
+static void	print_error_quote(t_lex_state state)
+{
+	if (state == SQUOTE)
+		ft_putstr_fd("error: missing single quote\n", 2);
+	else
+		ft_putstr_fd("error: missing double quote\n", 2);
 }
 
 static bool	check_token_quotes(char *str)
@@ -43,6 +51,8 @@ static bool	check_token_quotes(char *str)
 		i++;
 	}
 	// printf("Je finis le check du token avec le state : %u\n", state);
+	if (state != DEFAULT)
+		print_error_quote(state);
 	return (state == DEFAULT);
 }
 /**

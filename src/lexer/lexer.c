@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 10:43:27 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:38:11 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:29:33 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ static bool	split_token(t_shell *shell, char *line, t_lexer *lexer)
  * 
  * @param shell 
  * @param line l'input 
- * @return t_token* la liste chainee de tokens ou NULL si erreur quelque part
+ * @return true si la liste chainee de tokens est ok ou false si erreur quelque part
  * ou si pb dans les quotes 
  */
 bool	lexer(t_shell *shell, char *line)
@@ -103,11 +103,12 @@ bool	lexer(t_shell *shell, char *line)
 		return (NULL);
 	ft_bzero(&lexer, sizeof(t_lexer));//error false, status default, pos 0
 	lexer.source = line;
-	if (!split_token(shell, lexer.source, &lexer))//split en token, voir si besoin de protection en l'ecrivant
-		return (false);
-	if (!check_quotes(&shell->token))//verifie que chaque quote a bien sa complementaire pour se refermer (sauf les quotes dans les quotes)
-		return (false);
+	if (!split_token(shell, lexer.source, &lexer))
+		return (clean_lexer_struct(&lexer), false);
+	if (!check_quotes(&shell->token))
+		return (clean_lexer_struct(&lexer), false);//message erreur deja imprime avant
 	if (!split_subwords(&shell->token))//split les mots en subword
-		return (false);
+		return (clean_lexer_struct(&lexer), false);
+	clean_lexer_struct(&lexer);
 	return (true);
 }
