@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:01:34 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:51:19 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/03 11:37:12 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,50 +85,6 @@ static bool	split_subs(char *str, t_token *token)
 	}
 	return (create_sub(token, man.pos, &man.sub_len, SUB_UNQUOTED));//gerer le dernier mot si jamais il se finit pas par des quotes (sinon c'est gere dans la boucle)
 }
-
-// bool	split_subs(char *str, t_token *token)
-// {
-// 	int			i;
-// 	int			sub_len;
-// 	t_lex_state	state;
-	
-// 	i = 0;
-// 	sub_len = 0;
-// 	state = DEFAULT;
-// 	while (str[i])
-// 	{
-// 		if (state == DEFAULT && str[i] == '\'')
-// 		{
-// 			state = SQUOTE;
-// 			if (!create_sub(token, i, &sub_len, SUB_UNQUOTED))
-// 				return (false);
-// 		}
-// 		else if (state == DEFAULT && str[i] == '"')
-// 		{
-// 			state = DQUOTE;
-// 			if (!create_sub(token, i, &sub_len, SUB_UNQUOTED))
-// 				return (false);
-// 		}
-// 		else if (state == SQUOTE && str[i] == '\'')
-// 		{
-// 			state = DEFAULT;
-// 			if (!create_sub(token, i, &sub_len, SUB_SQUOTED))
-// 				return (false);
-// 		}
-// 		else if (state == DQUOTE && str[i] == '"')
-// 		{
-// 			state = DEFAULT;
-// 			if (!create_sub(token, i, &sub_len, SUB_DQUOTED))
-// 				return (false);
-// 		}
-// 		else
-// 			sub_len++;
-// 		i++;
-// 	}
-// 	if (!create_sub(token, i, &sub_len, SUB_UNQUOTED))//gerer le dernier mot si jamais il se finit pas par des quotes
-// 		return (false);
-// 	return (true);
-// }
 
 bool	split_subwords(t_token **token_list)
 {

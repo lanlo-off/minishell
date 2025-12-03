@@ -1,25 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean.c                                            :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 14:21:37 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 19:04:09 by llechert         ###   ########.fr       */
+/*   Created: 2025/12/03 17:04:34 by llechert          #+#    #+#             */
+/*   Updated: 2025/12/03 19:00:37 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../libft.h"
 
-// void	free_shell(t_shell *shell)
-// {
-// 	if (!shell)
-// 		return ;
-// 	if (shell->av)
-// 		free(shell->av);
-// 	if (shell->token)
-// 		free_list(shell->token);
-// 	free(shell);
-// 	return ;
-// }
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s1[i] == s2[i])
+		i++;
+	return (1 - (s1[i] == s2[i]));
+}

@@ -16,11 +16,13 @@ SRCS_A = base/ft_isalpha.c \
 	base/ft_strchr.c \
 	base/ft_strrchr.c \
 	base/ft_strncmp.c \
+	base/ft_strcmp.c \
 	base/ft_memcmp.c \
 	base/ft_strnstr.c \
 	base/ft_atoi.c \
 	base/ft_calloc.c \
 	base/ft_strdup.c \
+	base/ft_strndup.c \
 	base/ft_substr.c \
 	base/ft_strjoin.c \
 	base/ft_strtrim.c \

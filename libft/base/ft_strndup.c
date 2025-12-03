@@ -1,25 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean.c                                            :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/24 14:21:37 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 19:04:09 by llechert         ###   ########.fr       */
+/*   Created: 2025/12/03 16:48:12 by llechert          #+#    #+#             */
+/*   Updated: 2025/12/03 19:00:42 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../libft.h"
 
-// void	free_shell(t_shell *shell)
-// {
-// 	if (!shell)
-// 		return ;
-// 	if (shell->av)
-// 		free(shell->av);
-// 	if (shell->token)
-// 		free_list(shell->token);
-// 	free(shell);
-// 	return ;
-// }
+char	*ft_strndup(const char *s, int len)
+{
+	char	*dup;
+	int		i;
+
+	i = 0;
+	dup = malloc(sizeof(char) * len + 1);
+	if (!dup)
+		return (NULL);
+	while (i != len)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	dup[i] = '\0';
+	return (dup);
+}

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/01 16:31:07 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/03 18:59:57 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,14 @@ bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 
 
 /*=============== PARSER =============== */
+/*expand.c*/
+char	*expanded(char *str, t_sub_type type, t_shell *shell);
 
+/*parse.c*/
+bool	parser(t_shell *shell, t_token **token_lst);
 
+/*token_to_cmd.c*/
+bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 
 /*=============== EXEC =============== */
 /*loop.c*/

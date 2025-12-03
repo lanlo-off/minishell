@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
+/*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:51:31 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/24 14:58:43 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:42:14 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	free_new(t_env *new)
 	free(new);
 }
 
-static void	create_env_node(char *env, t_env **head)
+static void	create_node(char *env, t_env **head)
 {
 	int		i;
 	t_env	*new;
@@ -80,7 +80,7 @@ t_env	*get_env(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		create_env_node(envp[i], &env);
+		create_node(envp[i], &env);
 		i++;
 	}
 	return (env);

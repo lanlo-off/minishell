@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 17:17:20 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/26 17:36:44 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/03 17:06:41 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	ft_putstr_fd(char *s, int fd);
 char	**ft_split(char const *s, char c);
 char	*ft_strchr(const char *str, int c);
 char	*ft_strdup(const char *src);
+char	*ft_strndup(const char *s, int len);
 void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlcat(char *dest, char *src, size_t size);
@@ -46,6 +47,7 @@ size_t	ft_strlcpy(char *dest, char *src, size_t size);
 char	*ft_strcpy(char *dest, char *src);
 size_t	ft_strlen(const char *str);
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_strnstr(const char *str, const char *to_find, size_t n);
 char	*ft_strrchr(const char *str, int c);

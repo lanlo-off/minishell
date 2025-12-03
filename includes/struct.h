@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:04:12 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/03 19:02:23 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*full_token;
-	t_subword		*subword;//null si type != WORD
+	t_subword		*subword;
 	struct s_token	*next;
 }	t_token;
 
@@ -77,6 +77,30 @@ typedef struct s_sub_manager//pour split les subwords
 	int			sub_len;
 	t_lex_state	state;
 }	t_sub_manager;
+
+/*=============== PARSER =============== */
+
+// typedef enum e_redir_type
+// {
+// 	HEREDOC,
+// 	REDIR_IN,
+// 	APPEND,
+// 	REDIR_OUT,
+// }	t_redir_type;
+
+typedef struct s_redir t_redir;
+struct s_redir
+{
+	t_token_type	type;
+	char			*file;
+	t_redir			*next;
+};
+
+typedef struct s_cmd
+{
+	char	**av;//liste des arguments avec un NULL pour terminer
+	t_redir	*redirs;//liste chainee des redirections (il faut les faire dans l'ordre d'apparition)
+}	t_cmd;
 
 /*=============== ENV =============== */
 
@@ -93,8 +117,9 @@ typedef struct s_env
 typedef struct s_shell
 {
 	t_env	*env;
-	char	*av;//input
+	char	*av;//input brut
 	t_token	*token;
+	t_cmd	**cmds;
 	int		exit_code;
 }	t_shell;
 
