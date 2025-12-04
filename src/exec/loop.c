@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/01 16:41:55 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:02:45 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	infinite_loop(t_shell *shell)
 		// if (!exec_cmd(cmd_line, env))
 		// 	continue ;
 		// printf("%s\n", shell->av);
-		print_tokens(shell->token);
+		print_tokens_and_cmds(shell);
 		clean_lexer(shell);
 		shell->token = NULL;
 	}

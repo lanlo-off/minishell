@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 19:02:23 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 10:57:55 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,14 +79,6 @@ typedef struct s_sub_manager//pour split les subwords
 }	t_sub_manager;
 
 /*=============== PARSER =============== */
-
-// typedef enum e_redir_type
-// {
-// 	HEREDOC,
-// 	REDIR_IN,
-// 	APPEND,
-// 	REDIR_OUT,
-// }	t_redir_type;
 
 typedef struct s_redir t_redir;
 struct s_redir

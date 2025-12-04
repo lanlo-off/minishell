@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 18:59:57 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:05:29 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,19 @@ bool	split_subwords(t_token **token_list);
 bool	create_sub(t_token *token, int end, int *length, t_sub_type type);
 
 /*split_token.c*/
-//void	token_add_last(t_token *new, t_token **list);
-//bool	create_buffer_append(t_lexer *lexer, char c);
 bool	append_to_buffer(t_lexer *lexer, char c);
 bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 
 
 
 /*=============== PARSER =============== */
+/*expand_utils.c*/
+char	*join_and_free(char *s1, char *s2);
+char	*expand_var(char *str, int *i, t_shell *shell);
+char	*append_until_doll(char *str, int *i, char *res);
+
 /*expand.c*/
+int		get_var_end_pos(char *str, int start);
 char	*expanded(char *str, t_sub_type type, t_shell *shell);
 
 /*parse.c*/
@@ -86,11 +90,11 @@ bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 
 /*=============== EXEC =============== */
 /*loop.c*/
-int	infinite_loop(t_shell *shell);
+int		infinite_loop(t_shell *shell);
 
 
 
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
-void	print_tokens(t_token *token);
+void print_tokens_and_cmds(t_shell *shell);
 #endif

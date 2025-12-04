@@ -60,3 +60,58 @@ void	print_tokens(t_token *token)
         ti++;
     }
 }
+
+void print_commands(t_cmd **cmds)
+{
+    int ci = 0;
+
+    if (!cmds)
+        return;
+
+    while (cmds[ci])
+    {
+        t_cmd *cmd = cmds[ci];
+        printf("Command %d:\n", ci);
+
+        // Affichage des arguments
+        if (cmd->av)
+        {
+            int ai = 0;
+            while (cmd->av[ai])
+            {
+                printf("  Arg %d: %s\n", ai, cmd->av[ai]);
+                ai++;
+            }
+        }
+        else
+            printf("  (no arguments)\n");
+
+        // Affichage des redirections
+        t_redir *redir = cmd->redirs;
+        int ri = 0;
+        while (redir)
+        {
+            const char *type_str;
+            if (redir->type == REDIR_IN) type_str = "<";
+            else if (redir->type == REDIR_OUT) type_str = ">";
+            else if (redir->type == APPEND) type_str = ">>";
+            else if (redir->type == HEREDOC) type_str = "<<";
+            else type_str = "?";
+
+            printf("  Redir %d: %s %s\n", ri, type_str, redir->file);
+            redir = redir->next;
+            ri++;
+        }
+        printf("\n");
+        ci++;
+    }
+}
+
+void print_tokens_and_cmds(t_shell *shell)
+{
+    printf("=== TOKENS ===\n");
+    print_tokens(shell->token);
+
+    printf("=== COMMANDS ===\n");
+    print_commands(shell->cmds);
+}

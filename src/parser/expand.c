@@ -6,35 +6,81 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 15:00:42 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 19:08:14 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 11:56:32 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*get_expanded_var(char *var, t_env **env)
+/**
+ * @brief Get the var end pos index
+ * Start on the char after $ not on the $
+ * 
+ * @param str 
+ * @param start first char after $ (not $)
+ * @return int index of the last char of the var
+ */
+int	get_var_end_pos(char *str, int start)
 {
-	char	*res;
-	int		i;
-	t_env	*tmp;
+	int	end;
 
-	i = 0;
-	if (!env || !*env)
-		return (NULL);
-	tmp = *env;
-	while (tmp)
-	{
-		if (!ft_strcmp(var, tmp->key))//si on trouve bien la key
-		{
-			res = ft_strdup(tmp->value);
-			if (!res)
-				return (NULL);
-			return (res);
-		}
-		tmp=tmp->next;
-	}
-	return (NULL);
+	end = start;
+	if (!str[end])//pas de caracteres apres le $
+		return (end - 1);
+	if (str[end] == '?' || ft_isdigit(str[end]) || str[end] == '$')//si ? c'est la variable particuliere, si numerique ca consomme le premier nombre
+		return (end);
+	if (!ft_isalpha(str[end]) || str[end] != '_')//dans ce cas on ne consomme que le $ (car le cas du $0-9 est deja gere au dessus)
+		return (end - 1);
+	end++;//premier caractere est forcement alphabetique ou _
+	while (str[end] && (ft_isalnum(str[end]) || str[end] == '_'))//les suivants sont alphanum ou _
+		end++;
+	return (end - 1);//si le premier caractere est invalide, on renvoie donc l'index de ce dernier comme fin de variable, fonctionne aussi pour $?
 }
+
+char	*expanded(char *str, t_sub_type type, t_shell *shell)
+{
+	int		i;
+	char	*res;
+	char	*chunk;
+	
+	if (type == SUB_SQUOTED)
+		return (ft_strdup(str));
+	i = 0;
+	res = ft_strdup("");
+	while (str[i])
+	{
+		res = append_until_doll(str, &i, res);
+		if (!str[i])
+			break ;//on est a la fin de la string on n'a pas rencontre de dollar
+		i++;//sinon on skip le $
+		chunk = expand_var(str, &i, shell);
+		res = join_and_free(res, chunk);
+	}
+	return (res);
+}
+
+// int	count_size_needed(t_subword *subword)
+// {
+// 	int			count;
+// 	t_subword	*tmp;
+// 	int			i;
+
+// 	count = 0;
+// 	tmp = subword;
+// 	while (tmp)
+// 	{
+// 		i = 0;
+// 		while (tmp->val[i] && tmp->val[i] != '$')
+// 		{
+// 			count++;
+// 			i++;
+// 		}
+// 		if (tmp->val[i] && tmp->val[i] == '$')
+
+		
+// 		tmp = tmp->next;
+// 	}
+// }
 
 // char	*expanded(char *str, t_shell *shell)
 // {
@@ -61,79 +107,5 @@ static char	*get_expanded_var(char *var, t_env **env)
 // 			end = get_end_var(str, i);
 // 		var = ft_strndup(&str[i + 1], end - i);
 // 		res = 
-// 	}
-// }
-
-static bool	is_variable_valid(char c)
-{
-	if (ft_isalnum(c) || c == '_')
-		return (true);
-	return (false);
-}
-
-static int	get_var_end_pos(char *str, int start)//je start pas sur le $ mais sur le caractere d'apres
-{
-	int	end;
-
-	end = start;
-	// if (str[end] == '?')//si ? c'est la variable particuliere
-	// 	return (end);
-	if (ft_isalpha(str[end]) || str[end] == '_')//premier caractere est forcement alphabetique ou _
-	{
-		while (str[end] && is_variable_valid(str[end]))
-			end++;
-		return (end - 1);
-	}
-	return (end);//si le premier caractere est invalide, on renvoie donc l'index de ce dernier comme fin de variable
-}
-
-char	*expanded(char *str, t_sub_type type, t_shell *shell)
-{
-	int		start;
-	int		end;
-	char	*res;
-	char	*tmp;
-	char	*var;
-	
-	if (type == SUB_SQUOTED)
-		return (ft_strdup(str));
-	start = 0;
-	while (str[start])
-	{
-		end = start;
-		while (str[start] && str[start] != '$')
-			start++;
-		tmp = ft_strndup(&str[end], start);
-		if (str[start++] == '$')//j'avance pour passer le $
-			end = get_var_end_pos(str, start);
-		var = ft_strndup(&str[start], end - start + 1);
-		res = ft_strjoin(tmp, get_expanded_var(var, &shell->env));
-		free(tmp);
-		free(var);
-		start = end + 1;
-	}
-	return (res);
-}
-
-// int	count_size_needed(t_subword *subword)
-// {
-// 	int			count;
-// 	t_subword	*tmp;
-// 	int			i;
-
-// 	count = 0;
-// 	tmp = subword;
-// 	while (tmp)
-// 	{
-// 		i = 0;
-// 		while (tmp->val[i] && tmp->val[i] != '$')
-// 		{
-// 			count++;
-// 			i++;
-// 		}
-// 		if (tmp->val[i] && tmp->val[i] == '$')
-
-		
-// 		tmp = tmp->next;
 // 	}
 // }
