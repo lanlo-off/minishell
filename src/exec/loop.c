@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 12:02:45 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 14:07:42 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ int	infinite_loop(t_shell *shell)
 			clean_lexer(shell);
 			continue ;//et passe a la boucle suivante
 		}
-		// if (!parser(cmd_line))//on imprime l'erreur si besoin dans la fonction
-		// 	continue ;
+		if (!parser(shell, &shell->token))//on imprime l'erreur si besoin dans la fonction
+		{
+			clean_parser(shell);//inclut clean lexer dedans !
+			continue ;
+		}
 		// if (!exec_cmd(cmd_line, env))
 		// 	continue ;
 		// printf("%s\n", shell->av);
 		print_tokens_and_cmds(shell);
-		clean_lexer(shell);
+		clean_parser(shell);
 		shell->token = NULL;
 	}
 	return (shell->exit_code);

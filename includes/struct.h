@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 10:57:55 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:22:03 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,13 @@ struct s_redir
 	t_redir			*next;
 };
 
-typedef struct s_cmd
+typedef struct s_cmd t_cmd;
+struct s_cmd
 {
 	char	**av;//liste des arguments avec un NULL pour terminer
 	t_redir	*redirs;//liste chainee des redirections (il faut les faire dans l'ordre d'apparition)
-}	t_cmd;
+	t_cmd	*next;
+};
 
 /*=============== ENV =============== */
 
@@ -111,7 +113,7 @@ typedef struct s_shell
 	t_env	*env;
 	char	*av;//input brut
 	t_token	*token;
-	t_cmd	**cmds;
+	t_cmd	*cmds;
 	int		exit_code;
 }	t_shell;
 

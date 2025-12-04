@@ -15,7 +15,9 @@ SRCS += src/lexer/clean_lexer.c\
 	src/lexer/split_subwords.c\
 	src/lexer/split_token.c\
 
-SRCS += src/parser/expand.c\
+SRCS += src/parser/clean_parser.c\
+	src/parser/expand.c\
+	src/parser/expand_utils.c\
 	src/parser/parse.c\
 	src/parser/token_to_cmd.c\
 

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 12:05:29 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 15:01:16 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@
 # include <readline/history.h>
 
 /*=============== EXIT CODES =============== */
-# define EXIT_SUCCESS 			0
-# define EXIT_FAILURE 			1
+# define EXIT_SUCCESS			0
+# define EXIT_FAILURE			1
 # define EXIT_SYNTAX_ERROR		2
-# define EXIT_PERMISSION_DENIED 126
+# define EXIT_PERMISSION_DENIED	126
 # define EXIT_CMD_NOT_FOUND		127
 # define EXIT_SIGNAL			128
-# define EXIT_CTRL_C 			130
-# define EXIT_CTRL_D 			131
+# define EXIT_CTRL_C			130
+# define EXIT_CTRL_D			131
 
 /*=============== INIT =============== */
 
@@ -73,6 +73,10 @@ bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 
 
 /*=============== PARSER =============== */
+/*clean_parser.c*/
+void	clean_cmd(t_cmd *cmd);
+void	clean_parser(t_shell *shell);
+
 /*expand_utils.c*/
 char	*join_and_free(char *s1, char *s2);
 char	*expand_var(char *str, int *i, t_shell *shell);

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 11:29:36 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 12:05:10 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/04 12:07:36 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,11 @@ char	*expand_var(char *str, int *i, t_shell *shell)
 	char	*value;
 
 	start = *i;
-	end = get_var_end_position(str, start);
+	end = get_var_end_pos(str, start);
 	if (end < start)
 		return (ft_strdup("$"));
 	varname = ft_strndup(str + start, end - start + 1);
-	value = get_expanded_var(varname, shell->env, shell);
+	value = get_expanded_var(varname, &shell->env, shell);
 	free(varname);
 	*i = end + 1;//on avance l'index pour pas reboucler sur les caracteres de la variable dans la copie until litteral
 	return (value);

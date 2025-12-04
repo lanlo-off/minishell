@@ -113,5 +113,5 @@ void print_tokens_and_cmds(t_shell *shell)
     print_tokens(shell->token);
 
     printf("=== COMMANDS ===\n");
-    print_commands(shell->cmds);
+    print_commands(&shell->cmds);
 }
