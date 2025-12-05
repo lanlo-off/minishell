@@ -18,12 +18,14 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <editline/readline.h> // POUR MACOS
 
 /*=============== EXIT CODES =============== */
 # define EXIT_SUCCESS			0

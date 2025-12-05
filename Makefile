@@ -7,6 +7,9 @@ SRCS = src/main.c\
 	src/lexer/clean_lexer.c\
 	src/print_token.c\
 	src/exec/loop.c\
+	src/exec/built-in/pwd.c\
+	src/exec/built-in/cd.c\
+	src/exec/built-in/exit.c\
 	src/init/init.c\
 	src/lexer/clean_lexer.c\
 	src/lexer/lexer_utils.c\

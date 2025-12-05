@@ -25,7 +25,7 @@ int	main(int ac, char **av, char **envp)
 	}
 	init_structs(&shell, envp);
 	exit_code = infinite_loop(&shell);
-	rl_clear_history();
+	clear_history(); // POUR MACOS sinon rlclear_history
 	// clean_shell(&shell);
 	return(exit_code);
 }

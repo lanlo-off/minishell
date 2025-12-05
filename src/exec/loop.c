@@ -41,6 +41,7 @@ int	infinite_loop(t_shell *shell)
 	{
 		//check le signal a intervalles frequents ?
 		shell->av = readline("AU SUIVANT> ");
+		ft_pwd();
 		if (shell->av && *shell->av)
 			add_history(shell->av);
 		if(!lexer(shell, shell->av))//si pb, on imprime erreur dans lexer
