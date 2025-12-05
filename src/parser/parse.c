@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 10:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 15:20:55 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:46:04 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,42 +52,15 @@ static bool	create_cmds(t_shell *shell, t_token *token)
 		}
 		else if (!manage_word_and_redir(token, new, shell))
 			return (clean_cmd(new), false);
-		if (token->type != WORD && token->type != PIPE)
-			token = token->next;
-		token = token->next;
+		get_next_useful_token(&token, token->type);//Si token->type == REDIR on avance de 2, sinon on avance de 1
+		// if (token->type != WORD && token->type != PIPE)
+		// 	token = token->next;
+		// token = token->next;
 	}
 	if (new && (new->av || new->redirs))
 		return (append_cmd_to_shell(shell, new));
 	return (free(new), true);
 }
-
-// static bool	create_cmds(t_shell *shell, t_token **token_lst)
-// {
-// 	t_token	*token;
-// 	t_cmd	*new;
-	
-// 	token = *token_lst;
-// 	new = ft_calloc(1, sizeof(t_cmd));
-// 	if (!new)
-// 		return (false);
-// 	while (token)
-// 	{
-// 		if (token->type == PIPE)
-// 		{
-// 			append_cmd_to_shell(shell, new);
-// 			new = ft_calloc(1, sizeof(t_cmd));
-// 			if (!new)
-// 				return (false);
-// 		}
-// 		else
-// 		{
-// 			if (!manage_word_and_redir(token, new, shell))
-// 				return (false);
-// 		}
-// 		token = token->next;
-// 	}
-// 	return (append_cmd_to_shell(shell, new), true);
-// }
 
 static bool	check_redir(t_token **token_lst)
 {

@@ -1,20 +1,37 @@
 t_shell n'est pas malloc mais declare sur la stack
-
 t_lexer pareil
 
 Mais les 2 ont des composants qui sont eux malloc dans la heap par etapes et dans tous les cas je veux les free a chaque passage :
 
-#####LEXER#####
-1- t_token token dans split token
-1- char * buffer du lexer dans split token
-2- t_subword subword dans chaque token
-2- char * sub->val dans chaque subword
+A free pour passer a la boucle suivante :
 
-#####PARSER#####
-1- clean le lexer
+#####PENDANT-LEXER##### -->Applique systematiquement a la fin du lexer
+
+1- Dans t_lexer (pas malloc)
+	A- char * buffer du lexer dans split token ==> se fait a la fin du lexer
+
+
+#####POST-LEXER##### -->on fait cette etape soit en fin de boucle soit quand le lexer = false
+
+1- Dans t_shell (pas malloc)
+	A- t_token token dans split token
+		i- t_subword subword dans chaque token
+			a- char * sub->val dans chaque subword
+
+
+#####POST-PARSER##### -->on fait cette etape soit en fin de boucle soit quand le parser = false
+
+1- clean post-lexer
 2- clean ce qui a ete cree/duplique dans le parser
 	A- liste de commandes t_cmd ** dans shell -> est elle alloc ?
 		i- char **av liste des arguments
 			a- char* chaque argument de la liste
 		ii- t_redir* liste chainee des redirections
 			a- char* fichier de redirection
+
+
+#####POST-EXEC##### --> on fait cette etape en fin de boucle anyway (?)
+1- clean post-lexer
+2- clean post-parser
+3- le propre de l'exec : 
+	A- 

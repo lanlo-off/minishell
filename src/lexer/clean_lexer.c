@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:18:03 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/01 16:31:21 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/05 10:10:03 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ static void	clean_token(t_token **token_list)
 	}
 }
 
-void	clean_lexer(t_shell *shell)
+void	clean_post_lexer(t_shell *shell)
 {
 	if (!shell)
 		return ;
+	if (shell->av)
+		free(shell->av);
 	if (shell->token)
 		clean_token(&shell->token);
+	shell->token = NULL;
 }
 
 void	clean_lexer_struct(t_lexer *lexer)

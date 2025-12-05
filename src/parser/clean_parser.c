@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 15:24:53 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/05 10:09:57 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,12 @@ static void	clean_cmd_lst(t_cmd *cmd_lst)
 	}
 }
 
-void	clean_parser(t_shell *shell)
+void	clean_post_parser(t_shell *shell)
 {
 	if (!shell)
 		return ;
-	clean_lexer(shell);
+	clean_post_lexer(shell);
 	if (shell->cmds)
 		clean_cmd_lst(shell->cmds);
+	shell->cmds = NULL;
 }

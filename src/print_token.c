@@ -64,13 +64,14 @@ void	print_tokens(t_token *token)
 void print_commands(t_cmd **cmds)
 {
     int ci = 0;
+    t_cmd *cmd;
 
     if (!cmds)
         return;
 
-    while (cmds[ci])
+    cmd = *cmds;
+    while (cmd)
     {
-        t_cmd *cmd = cmds[ci];
         printf("Command %d:\n", ci);
 
         // Affichage des arguments
@@ -92,10 +93,10 @@ void print_commands(t_cmd **cmds)
         while (redir)
         {
             const char *type_str;
-            if (redir->type == REDIR_IN) type_str = "<";
-            else if (redir->type == REDIR_OUT) type_str = ">";
-            else if (redir->type == APPEND) type_str = ">>";
-            else if (redir->type == HEREDOC) type_str = "<<";
+            if (redir->type == REDIR_IN) type_str = "REDIR IN from :";
+            else if (redir->type == REDIR_OUT) type_str = "REDIR OUT to :";
+            else if (redir->type == APPEND) type_str = "APPEND to :";
+            else if (redir->type == HEREDOC) type_str = "HEREDOC with limiter :";
             else type_str = "?";
 
             printf("  Redir %d: %s %s\n", ri, type_str, redir->file);
@@ -104,6 +105,7 @@ void print_commands(t_cmd **cmds)
         }
         printf("\n");
         ci++;
+        cmd = cmd->next;
     }
 }
 

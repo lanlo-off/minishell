@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 15:01:16 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/05 14:52:45 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_env	*get_env(char **envp);
 
 /*=============== LEXER =============== */
 /*clean_lexer.c*/
-void	clean_lexer(t_shell *shell);
+void	clean_post_lexer(t_shell *shell);
 void	clean_lexer_struct(t_lexer *lexer);
 
 /*lexer.c*/
@@ -75,15 +75,13 @@ bool	save_token(t_lexer *lexer, t_token **token, t_token_type type);
 /*=============== PARSER =============== */
 /*clean_parser.c*/
 void	clean_cmd(t_cmd *cmd);
-void	clean_parser(t_shell *shell);
+void	clean_post_parser(t_shell *shell);
 
 /*expand_utils.c*/
-char	*join_and_free(char *s1, char *s2);
+void	get_next_useful_token(t_token **token, t_token_type type);
 char	*expand_var(char *str, int *i, t_shell *shell);
-char	*append_until_doll(char *str, int *i, char *res);
 
 /*expand.c*/
-int		get_var_end_pos(char *str, int start);
 char	*expanded(char *str, t_sub_type type, t_shell *shell);
 
 /*parse.c*/
@@ -96,9 +94,11 @@ bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 /*loop.c*/
 int		infinite_loop(t_shell *shell);
 
+/*clean_loop.c*/
+void	prepare_next_loop(t_shell *shell);
 
 
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
-void print_tokens_and_cmds(t_shell *shell);
+void	print_tokens_and_cmds(t_shell *shell);
 #endif

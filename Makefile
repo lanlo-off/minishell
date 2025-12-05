@@ -1,7 +1,8 @@
 SRCS = src/main.c\
-	src/print_token.c\
+	src/print_token.c
 
 SRCS += src/exec/loop.c\
+	src/exec/clean_loop.c
 
 SRCS += src/init/init.c\
 	src/init/get_env.c

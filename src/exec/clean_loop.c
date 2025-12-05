@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalpha.c                                       :+:      :+:    :+:   */
+/*   clean_loop.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/26 11:13:45 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 15:54:23 by llechert         ###   ########.fr       */
+/*   Created: 2025/12/05 08:03:16 by llechert          #+#    #+#             */
+/*   Updated: 2025/12/05 14:35:15 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
+#include "../../includes/minishell.h"
 
-int	ft_isalpha(int c)
+void	prepare_next_loop(t_shell *shell)
 {
-	if (c >= 'A' && c <= 'Z')
-		return (1);
-	if (c >= 'a' && c <= 'z')
-		return (1);
-	return (0);
+	clean_post_parser(shell);
+	//clean exec
+	
 }
