@@ -17,8 +17,10 @@
 # include "../libft/libft.h"
 # include <stdio.h>
 # include <stdlib.h>
+# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <editline/readline.h> // POUR MACOS
 
 /*=============== EXIT CODES =============== */
 # define EXIT_SUCCESS			0
