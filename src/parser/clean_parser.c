@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 10:09:57 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/07 14:23:48 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,15 @@ static void	clean_redir_cmd(t_redir *redirs)
 
 	if (!redirs)
 		return ;
-	while (redirs)
+	while (redirs->next)
 	{
 		tmp = redirs;
+		redirs = redirs->next;
 		free(tmp->file);
 		free(tmp);
-		redirs = redirs->next;
 	}
+	free(redirs->file);
+	free(redirs);
 }
 
 static void	clean_args_cmd(char **av)

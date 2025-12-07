@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/27 18:28:45 by llechert          #+#    #+#             */
-/*   Updated: 2025/11/27 18:42:12 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/07 13:56:02 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static bool	create_buffer_append(t_lexer *lexer, char c)
 	lexer->buffer[0] = c;
 	lexer->buffer[1] = 0;
 	lexer->buffer_size = 2;
+	// printf("Je cree le buffer de lexer pour le char [%c] Mon buffer de taille [%i] vaut [%s]\n\n\n", c, lexer->buffer_size, lexer->buffer);
 	return (true);
 }
 
@@ -56,9 +57,12 @@ bool	append_to_buffer(t_lexer *lexer, char c)
 	
 	if (!lexer->buffer)//si pas encore de buffer cree
 		return (create_buffer_append(lexer, c));
+	// printf("J'entre dans append_to_buffer pour le char [%c]\nMon buffer de taille [%i] vaut [%s]\n", c, lexer->buffer_size, lexer->buffer);
 	if ((int)ft_strlen(lexer->buffer) + 1 >= lexer->buffer_size)//si plus de place dans le buffer
 	{
+		// printf("Je dois doubler la taille de mon buffer pour pouvoir y append le char [%c]\n", c);
 		lexer->buffer_size *= 2;
+		// printf("Mon buffer a maintenant la taille [%i]\n", lexer->buffer_size);
 		new_buffer = malloc(lexer->buffer_size);
 		if (!new_buffer)
 			return (false);
@@ -66,9 +70,12 @@ bool	append_to_buffer(t_lexer *lexer, char c)
 		ft_strcpy(new_buffer, lexer->buffer);
 		free(lexer->buffer);
 		lexer->buffer = new_buffer;
+		// printf("Apres avoir duplique l'ancien buffer dans le nouveau, le nouveau vaut [%s] de taille [%i]\n", lexer->buffer, lexer->buffer_size);
 	}
+	// printf("je peux maintenant append le char [%c] au buffer [%s] de taille [%i]\nLe nouveau char va en index [%li] et le 0 va en index [%li]\n", c, lexer->buffer, lexer->buffer_size, ft_strlen(lexer->buffer), ft_strlen(lexer->buffer) + 1);
 	lexer->buffer[ft_strlen(lexer->buffer)] = c;//on append le charactere
-	lexer->buffer[ft_strlen(lexer->buffer) + 1] = 0;//on termine pour pouvoir manipuler correctement le token plus tard
+	lexer->buffer[ft_strlen(lexer->buffer)] = 0;//on termine pour pouvoir manipuler correctement le token plus tard
+	// printf("mon buffer de taille [%i] vaut donc maintenant [%s], il rest donc [%i] places pour des characteres dans le buffer\n\n\n", lexer->buffer_size, lexer->buffer, lexer->buffer_size - (int)ft_strlen(lexer->buffer) - 1);
 	return (true);
 }
 
