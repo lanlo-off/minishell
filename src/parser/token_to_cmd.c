@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 13:34:09 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/03 19:12:38 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:34:59 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static char	*concat_expand_token(t_subword *subword, t_shell *shell)
 	return (res);
 }
 
-static bool	handle_redir_token(t_token *token, t_cmd *cmd, t_shell *shell)
+static bool	handle_redir_in_token(t_token *token, t_cmd *cmd, t_shell *shell)
 {
 	t_redir	*new_redir;
 	t_redir	*tmp;
@@ -48,11 +48,33 @@ static bool	handle_redir_token(t_token *token, t_cmd *cmd, t_shell *shell)
 		return (false);
 	new_redir->type = token->type;
 	new_redir->file = concat_expand_token(token->next->subword, shell);//il faut recuperer le nom du fichier (et pour ca il faut concatener tous les subwords apres les avoir expand)
-	if (!cmd->redirs)//s'il n'y a pas encore de redirections on dit que le new est le premier
-		cmd->redirs = new_redir;
+	if (!cmd->redirs_in)//s'il n'y a pas encore de redirections on dit que le new est le premier
+		cmd->redirs_in = new_redir;
 	else//sinon on rajoute cette redirection a la fin de la liste chainee des redirs
 	{
-		tmp = cmd->redirs;
+		tmp = cmd->redirs_in;
+		while (tmp->next)
+			tmp = tmp->next;
+		tmp->next = new_redir;
+	}
+	return (true);
+}
+
+static bool	handle_redir_out_token(t_token *token, t_cmd *cmd, t_shell *shell)
+{
+	t_redir	*new_redir;
+	t_redir	*tmp;
+	
+	new_redir = ft_calloc(1, sizeof(t_redir));
+	if (!new_redir)
+		return (false);
+	new_redir->type = token->type;
+	new_redir->file = concat_expand_token(token->next->subword, shell);//il faut recuperer le nom du fichier (et pour ca il faut concatener tous les subwords apres les avoir expand)
+	if (!cmd->redirs_out)//s'il n'y a pas encore de redirections on dit que le new est le premier
+		cmd->redirs_out = new_redir;
+	else//sinon on rajoute cette redirection a la fin de la liste chainee des redirs
+	{
+		tmp = cmd->redirs_out;
 		while (tmp->next)
 			tmp = tmp->next;
 		tmp->next = new_redir;
@@ -91,6 +113,8 @@ bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell)
 {
 	if (token->type == WORD)
 		return (handle_word_token(token, cmd, shell));
-	else//sous entendu c'est une redir car ca ne peut pas etre PIPE ici
-		return (handle_redir_token(token, cmd, shell));//attention car on traite 2 tokens (le token redir et le token suivant qui donne le file)
+	else if (token->type == REDIR_IN || token->type == HEREDOC)
+		return (handle_redir_in_token(token, cmd, shell));//attention car on traite 2 tokens (le token redir et le token suivant qui donne le file)
+	else //sous entendu on est dans les redir out
+		return (handle_redir_out_token(token, cmd, shell));//attention car on traite 2 tokens (le token redir et le token suivant qui donne le file)
 }

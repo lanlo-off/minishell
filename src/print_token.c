@@ -87,8 +87,8 @@ void print_commands(t_cmd **cmds)
         else
             printf("  (no arguments)\n");
 
-        // Affichage des redirections
-        t_redir *redir = cmd->redirs;
+        // Affichage des redirections in
+        t_redir *redir = cmd->redirs_in;
         int ri = 0;
         while (redir)
         {
@@ -99,11 +99,28 @@ void print_commands(t_cmd **cmds)
             else if (redir->type == HEREDOC) type_str = "HEREDOC with limiter :";
             else type_str = "?";
 
-            printf("  Redir %d: %s %s\n", ri, type_str, redir->file);
+            printf("  Redir_in %d: %s %s\n", ri, type_str, redir->file);
             redir = redir->next;
             ri++;
         }
         printf("\n");
+
+        // Affichage des redirections out
+        t_redir *redir2 = cmd->redirs_out;
+        int r2i = 0;
+        while (redir2)
+        {
+            const char *type_str;
+            if (redir2->type == REDIR_IN) type_str = "REDIR IN from :";
+            else if (redir2->type == REDIR_OUT) type_str = "REDIR OUT to :";
+            else if (redir2->type == APPEND) type_str = "APPEND to :";
+            else if (redir2->type == HEREDOC) type_str = "HEREDOC with limiter :";
+            else type_str = "?";
+
+            printf("  Redir_out %d: %s %s\n", r2i, type_str, redir2->file);
+            redir2 = redir2->next;
+            r2i++;
+        }
         ci++;
         cmd = cmd->next;
     }

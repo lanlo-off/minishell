@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 14:52:45 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:25:43 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,15 @@
 
 # include "struct.h"
 # include "../libft/libft.h"
+# include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
 /*=============== EXIT CODES =============== */
 # define EXIT_SUCCESS			0

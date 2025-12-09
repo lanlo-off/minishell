@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/07 14:23:48 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:32:51 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ void	clean_cmd(t_cmd *cmd)
 		return ; 
 	if (cmd->av)
 		clean_args_cmd(cmd->av);
-	if (cmd->redirs)
-		clean_redir_cmd(cmd->redirs);
+	if (cmd->redirs_in)
+		clean_redir_cmd(cmd->redirs_in);
+	if (cmd->redirs_out)
+		clean_redir_cmd(cmd->redirs_out);
 }
 
 static void	clean_cmd_lst(t_cmd *cmd_lst)

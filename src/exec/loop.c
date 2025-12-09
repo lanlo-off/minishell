@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 09:25:20 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 16:59:23 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ int	infinite_loop(t_shell *shell)
 			clean_post_parser(shell);//inclut clean lexer dedans !
 			continue ;
 		}
-		// if (!exec_cmd(cmd_line, env))
-		// 	continue ;
+		if (!execution(shell, shell->cmds, shell->env))
+			continue ;
 		// printf("%s\n", shell->av);
 		print_tokens_and_cmds(shell);
 		prepare_next_loop(shell);

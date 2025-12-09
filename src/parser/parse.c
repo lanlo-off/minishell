@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 10:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 14:46:04 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:44:18 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ static bool	append_cmd_to_shell(t_shell *shell, t_cmd *new_cmd)
 
 	if (!shell || !new_cmd)
 		return (false);
-	new_cmd->next = NULL;//redondant a priori
+	if (!fill_cmd(new_cmd, shell))//on met les fd a -1 et on recupere le path_cmd
+		return (false);
 	if (!shell->cmds)
 	{
 		shell->cmds = new_cmd;
@@ -28,6 +29,7 @@ static bool	append_cmd_to_shell(t_shell *shell, t_cmd *new_cmd)
 	while (tmp->next)
 		tmp = tmp->next;
 	tmp->next = new_cmd;
+	new_cmd->prev = tmp;
 	return (true);
 }
 
@@ -46,7 +48,7 @@ static bool	create_cmds(t_shell *shell, t_token *token)
 		}
 		if (token->type == PIPE)
 		{
-			if (new && (new->av || new->redirs) && !append_cmd_to_shell(shell, new))
+			if (new && (new->av || new->redirs_in || new->redirs_out) && !append_cmd_to_shell(shell, new))
 				return (clean_cmd(new), false);
 			new = NULL;
 		}
@@ -57,7 +59,7 @@ static bool	create_cmds(t_shell *shell, t_token *token)
 		// 	token = token->next;
 		// token = token->next;
 	}
-	if (new && (new->av || new->redirs))
+	if (new && (new->av || new->redirs_in || new->redirs_out))
 		return (append_cmd_to_shell(shell, new));
 	return (free(new), true);
 }
@@ -121,7 +123,7 @@ bool	parser(t_shell *shell, t_token **token_lst)
 		return (false);//Message d'erreur dans check pipes
 	if (!create_cmds(shell, *token_lst))
 	{
-		ft_putstr_fd("ERROR CREATING CMDS\n", 2);
+		ft_putstr_fd("ERROR CREATING CMDS\n", 2);//a mon avis on fera pas le message ici car il y a aussi le cas du path pas trouve
 		return (false);
 	}
 	return (true);

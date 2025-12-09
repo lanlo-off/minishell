@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/04 15:22:03 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 19:40:58 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,15 @@ typedef struct s_cmd t_cmd;
 struct s_cmd
 {
 	char	**av;//liste des arguments avec un NULL pour terminer
-	t_redir	*redirs;//liste chainee des redirections (il faut les faire dans l'ordre d'apparition)
+	t_redir	*redirs_in;//liste chainee des redirections in (il faut les faire dans l'ordre d'apparition)
+	t_redir	*redirs_out;//liste chainee des redirections out (il faut les faire dans l'ordre d'apparition)
+	char	*path;
+	bool	path_to_free;
+	int		fd_in;
+	int		fd_out;
+	pid_t	pid;
 	t_cmd	*next;
+	t_cmd	*prev;
 };
 
 /*=============== ENV =============== */
