@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 19:40:58 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:36:25 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ struct s_cmd
 	int		fd_in;
 	int		fd_out;
 	pid_t	pid;
+	int		exit_status;
 	t_cmd	*next;
 	t_cmd	*prev;
 };

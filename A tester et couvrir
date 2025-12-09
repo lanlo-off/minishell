@@ -1,0 +1,3 @@
+1/ Faire ulimit -n 3 pour limiter le nb de fd dispo et faire fail les pipes
+	Quand le pipe fail, aucune commande ne doit se lancer meme si independante (sleep 3 | sleep 3)
+2/ 

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 19:25:43 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/09 22:31:48 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,22 @@ bool	parser(t_shell *shell, t_token **token_lst);
 bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 
 /*=============== EXEC =============== */
-/*loop.c*/
-int		infinite_loop(t_shell *shell);
 
 /*clean_loop.c*/
 void	prepare_next_loop(t_shell *shell);
 
+/*exec0.c*/
+bool	execution(t_shell *shell, t_cmd *cmd_lst, t_env *env);
+
+/*loop.c*/
+int		infinite_loop(t_shell *shell);
+
+/*redir.c*/
+bool	is_std_fd(int fd);
+int		open_outfile(char *file, t_token_type type);
+bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
+int		open_infile(char *file);
+bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst);
 
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
