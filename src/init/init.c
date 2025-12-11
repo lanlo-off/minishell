@@ -23,6 +23,7 @@ void	init_structs(t_shell *shell, char **envp)
 		return ;
 	ft_bzero(shell, sizeof(t_shell));
 	shell->env = get_env(envp);
+	shell->envp = envp;
 	// init_signals(shell);//a voir avec cscarti
 }
 

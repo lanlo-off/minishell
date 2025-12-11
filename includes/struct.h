@@ -15,6 +15,7 @@
 
 # include "minishell.h"
 # include <stdbool.h>
+# include <sys/types.h>
 
 /*=============== LEXER =============== */
 
@@ -125,6 +126,7 @@ typedef struct s_shell
 	t_cmd	*cmds;
 	bool	flag_exit;
 	int		exit_code;
+	char	**envp;
 }	t_shell;
 
 #endif

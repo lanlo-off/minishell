@@ -22,10 +22,10 @@ static int	wait_children(t_cmd *cmd_lst)
 	cmd = cmd_lst;
 	while (cmd->next)
 	{
-		waitpid(cmd->pid, cmd->exit_status, 0);
+		waitpid(cmd->pid, &cmd->exit_status, 0);
 		cmd = cmd->next;
 	}
-	waitpid(cmd->pid, cmd->exit_status, 0);//pour le dernier
+	waitpid(cmd->pid, &cmd->exit_status, 0);//pour le dernier
 	code = cmd->exit_status;//on recupere le dernier exit code avant de le rendre intelligible ci dessous
 	if (WIFEXITED(code))
 		return (WEXITSTATUS(code));
@@ -41,8 +41,8 @@ int	infinite_loop(t_shell *shell)
 	{
 		//check le signal a intervalles frequents ?
 		shell->av = readline("AU SUIVANT> ");
-		ft_pwd();
-		if (shell->av && *shell->av)
+    ft_putstr_fd(CYAN "========================================" RESET "\n", 1);
+    if (shell->av && *shell->av)
 			add_history(shell->av);
 		if(!lexer(shell, shell->av))//si pb, on imprime erreur dans lexer
 		{
@@ -54,7 +54,7 @@ int	infinite_loop(t_shell *shell)
 			clean_post_parser(shell);//inclut clean lexer dedans !
 			continue ;
 		}
-		if (!execution(shell, shell->cmds, shell->env))
+		if (!execution(shell, shell->cmds))
 			continue ;
 		shell->exit_code = wait_children(shell->cmds);
 		// printf("%s\n", shell->av);
@@ -62,7 +62,9 @@ int	infinite_loop(t_shell *shell)
 		prepare_next_loop(shell);
 	}
 	return (shell->exit_code);
-int infinite_loop(t_shell *shell) 
+}
+
+/* int infinite_loop(t_shell *shell) 
 {
   while (1) 
   {
@@ -92,3 +94,4 @@ int infinite_loop(t_shell *shell)
   }
   return (shell->exit_code);
 }
+ */

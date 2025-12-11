@@ -3,9 +3,9 @@ SRCS = src/main.c\
 	src/exec/loop.c\
 	src/exec/clean_loop.c\
 	src/exec/exec.c\
-	src/exec/pipe.c\
+	src/exec/exec_utils.c\
 	src/exec/utils.c\
-	src/exec/redirections.c\
+	src/exec/redir.c\
 	src/exec/built-in/pwd.c\
 	src/exec/built-in/cd.c\
 	src/exec/built-in/exit.c\
@@ -13,10 +13,12 @@ SRCS = src/main.c\
 	src/exec/built-in/echo.c\
 	src/exec/built-in/export.c\
 	src/exec/built-in/unset.c\
+	src/exec/heredoc.c\
 	src/free_error/clean.c\
 	src/free_error/free_lists.c\
 	src/init/init.c\
 	src/init/get_env.c\
+	src/init/get_path.c\
 	src/lexer/clean_lexer.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
@@ -29,6 +31,7 @@ SRCS = src/main.c\
 	src/parser/expand.c\
 	src/parser/expand_utils.c\
 	src/parser/parse.c\
+	src/parser/utils.c\
 	src/parser/token_to_cmd.c
 
 

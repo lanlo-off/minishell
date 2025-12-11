@@ -18,7 +18,6 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <sys/wait.h>
@@ -53,6 +52,8 @@
 /*=============== INIT =============== */
 /*init.c*/
 void	init_structs(t_shell *shell, char **envp);
+bool	fill_cmd(t_cmd *cmd, t_shell *shell);
+char	*get_path(char *cmd, t_env	*env);
 
 /*get_env.c*/
 t_env	*get_env(char **envp);
@@ -110,9 +111,12 @@ bool	parser(t_shell *shell, t_token **token_lst);
 /*token_to_cmd.c*/
 bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 
+/*utils.c*/
+t_sub_type	get_file_quote_type(t_subword *sub_lst);
+
 /*=============== EXEC =============== */
 /*exec.c*/
-void exec_cmd(t_shell *shell);
+//static void	exec_cmd(t_cmd *cmd, t_env *env);
 bool is_builtin(char *cmd);
 void exec_builtin(t_shell *shell);
 
@@ -122,7 +126,7 @@ void exec_pipeline(t_shell *shell);
 /*redirections.c*/
 bool handle_redirections(t_cmd *cmd);
 
-/*built-in/pwd.c*/
+/*built-in*/
 bool ft_pwd(char **av);
 bool ft_cd(t_shell *shell);
 bool ft_exit(t_shell *t_shell);
@@ -142,7 +146,7 @@ int		infinite_loop(t_shell *shell);
 void	prepare_next_loop(t_shell *shell);
 
 /*exec0.c*/
-bool	execution(t_shell *shell, t_cmd *cmd_lst, t_env *env);
+bool	execution(t_shell *shell, t_cmd *cmd_lst);
 
 /*loop.c*/
 int		infinite_loop(t_shell *shell);
