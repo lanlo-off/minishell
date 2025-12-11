@@ -37,15 +37,25 @@
 # define EXIT_CTRL_C			130
 # define EXIT_CTRL_D			131
 
-/*=============== INIT =============== */
 
+/*=============== COLORS =============== */
+# define RESET "\033[0m"
+# define GREEN "\033[1;32m"
+# define RED "\033[1;31m"
+# define GRAY "\033[1;90m"
+# define CYAN "\033[1;36m"
+
+
+/*=============== OTHERS =============== */
+# define PATH_MAX 4096
+
+
+/*=============== INIT =============== */
 /*init.c*/
 void	init_structs(t_shell *shell, char **envp);
 
 /*get_env.c*/
 t_env	*get_env(char **envp);
-
-
 
 
 /*=============== LEXER =============== */
@@ -87,6 +97,7 @@ void	clean_post_parser(t_shell *shell);
 /*expand_utils.c*/
 void	get_next_useful_token(t_token **token, t_token_type type);
 char	*expand_var(char *str, int *i, t_shell *shell);
+char	*get_expanded_var(char *var, t_env **env, t_shell *shell);
 
 /*expand.c*/
 char	*join_and_free(char *s1, char *s2);
@@ -100,6 +111,32 @@ bool	parser(t_shell *shell, t_token **token_lst);
 bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 
 /*=============== EXEC =============== */
+/*exec.c*/
+void exec_cmd(t_shell *shell);
+bool is_builtin(char *cmd);
+void exec_builtin(t_shell *shell);
+
+/*pipe.c*/
+void exec_pipeline(t_shell *shell);
+
+/*redirections.c*/
+bool handle_redirections(t_cmd *cmd);
+
+/*built-in/pwd.c*/
+bool ft_pwd(char **av);
+bool ft_cd(t_shell *shell);
+bool ft_exit(t_shell *t_shell);
+bool ft_export(t_shell *shell);
+bool export_var(t_shell *shell, char *arg);
+bool ft_unset(t_shell *shell);
+bool ft_env(t_shell *shell);
+bool ft_echo(char **args);
+
+/*utils*/
+int check_args(char **av, int nbArgs);
+
+/*loop.c*/
+int		infinite_loop(t_shell *shell);
 
 /*clean_loop.c*/
 void	prepare_next_loop(t_shell *shell);
@@ -120,7 +157,12 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
 /*here_doc.c*/
 bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
 
+/*clean.c*/
+void    clean_exit(t_shell *shell);
+void    clean_shell(t_shell *shell);
 
+/*free_lists.c*/
+void free_env(t_env *env);
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
 void	print_tokens_and_cmds(t_shell *shell);

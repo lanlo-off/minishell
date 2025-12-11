@@ -128,9 +128,11 @@ void print_commands(t_cmd **cmds)
 
 void print_tokens_and_cmds(t_shell *shell)
 {
-    printf("=== TOKENS ===\n");
+    ft_putstr_fd(CYAN "========================================" RESET "\n", 1);
+    printf(GREEN "===" RESET " TOKENS " GREEN "===\n" RESET);
     print_tokens(shell->token);
 
-    printf("=== COMMANDS ===\n");
+    printf(GREEN "===" RESET " COMMANDS " GREEN "===\n" RESET);
     print_commands(&shell->cmds);
+    ft_putstr_fd(CYAN "========================================" RESET "\n", 1);
 }

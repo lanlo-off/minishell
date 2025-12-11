@@ -12,14 +12,21 @@
 
 #include "../../includes/minishell.h"
 
-// void	free_shell(t_shell *shell)
-// {
-// 	if (!shell)
-// 		return ;
-// 	if (shell->av)
-// 		free(shell->av);
-// 	if (shell->token)
-// 		free_list(shell->token);
-// 	free(shell);
-// 	return ;
-// }
+void	clean_shell(t_shell *shell)
+{
+  if (!shell)
+ 		return ;
+  if (shell->av)
+    free(shell->av);
+  if (shell->env)
+    free_env(shell->env);
+  free(shell);
+ 	return ;
+}
+
+void    clean_exit(t_shell *shell)
+{    
+  clean_post_lexer(shell);
+  clean_post_parser(shell);
+  shell->exit_code = 1;
+}

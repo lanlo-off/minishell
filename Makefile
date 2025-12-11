@@ -1,16 +1,22 @@
 SRCS = src/main.c\
-	src/print_token.c
-	src/exec/loop.c\
-	src/exec/clean_loop.c
-	src/init/init.c\
-	src/init/get_env.c
-	src/lexer/clean_lexer.c\
 	src/print_token.c\
 	src/exec/loop.c\
+	src/exec/clean_loop.c\
+	src/exec/exec.c\
+	src/exec/pipe.c\
+	src/exec/utils.c\
+	src/exec/redirections.c\
 	src/exec/built-in/pwd.c\
 	src/exec/built-in/cd.c\
 	src/exec/built-in/exit.c\
+	src/exec/built-in/env.c\
+	src/exec/built-in/echo.c\
+	src/exec/built-in/export.c\
+	src/exec/built-in/unset.c\
+	src/free_error/clean.c\
+	src/free_error/free_lists.c\
 	src/init/init.c\
+	src/init/get_env.c\
 	src/lexer/clean_lexer.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
@@ -54,6 +60,7 @@ $(NAME): $(LIBFT) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lreadline -o $(NAME)
 
 $(OBJS_DIR)/%.o: src/%.c $(HEADER) | $(OBJS_DIR)
+	@mkdir -p $(dir $@)
 	$(CC) -I./libft $(CFLAGS) -c $< -o $@
 
 $(LIBFT):

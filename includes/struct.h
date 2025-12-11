@@ -123,6 +123,7 @@ typedef struct s_shell
 	char	*av;//input brut
 	t_token	*token;
 	t_cmd	*cmds;
+	bool	flag_exit;
 	int		exit_code;
 }	t_shell;
 

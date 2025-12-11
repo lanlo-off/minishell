@@ -19,7 +19,7 @@ void	get_next_useful_token(t_token **token, t_token_type type)
 		*token = (*token)->next;//on skip le token WORD = file du redir car deja traite avec le redir
 }
 
-static char	*get_expanded_var(char *var, t_env **env, t_shell *shell)
+char	*get_expanded_var(char *var, t_env **env, t_shell *shell)
 {
 	t_env	*tmp;
 

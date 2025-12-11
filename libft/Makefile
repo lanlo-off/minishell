@@ -22,6 +22,7 @@ SRCS_A = base/ft_isalpha.c \
 	base/ft_atoi.c \
 	base/ft_calloc.c \
 	base/ft_strdup.c \
+	base/ft_strdup.c \
 	base/ft_strndup.c \
 	base/ft_substr.c \
 	base/ft_strjoin.c \

@@ -62,4 +62,33 @@ int	infinite_loop(t_shell *shell)
 		prepare_next_loop(shell);
 	}
 	return (shell->exit_code);
+int infinite_loop(t_shell *shell) 
+{
+  while (1) 
+  {
+    // check le signal a intervalles frequents ?
+    shell->av = readline( "AU SUIVANT> " );
+    ft_putstr_fd(CYAN "========================================" RESET "\n", 1);
+    if (shell->av && *shell->av)
+      add_history(shell->av);
+    if (!lexer(shell, shell->av)) // si pb, on imprime erreur dans lexer
+    {
+      clean_post_lexer(shell); // on prepare la prochaine boucle en faisant free
+      continue;                // et passe a la boucle suivante
+    }
+    if (!parser(shell,&shell->token)) // on imprime l'erreur si besoin dans la fonction
+    {
+      clean_post_parser(shell); // inclut clean lexer dedans !
+      continue;
+    }
+    exec_cmd(shell);
+    print_tokens_and_cmds(shell);
+    if (shell->flag_exit)
+    {
+      clean_exit(shell);
+      return (shell->exit_code);
+    }
+    prepare_next_loop(shell);
+  }
+  return (shell->exit_code);
 }
