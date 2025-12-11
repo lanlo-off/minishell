@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 22:31:48 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/11 15:05:00 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ void	get_next_useful_token(t_token **token, t_token_type type);
 char	*expand_var(char *str, int *i, t_shell *shell);
 
 /*expand.c*/
+char	*join_and_free(char *s1, char *s2);
+char	*append_until_doll(char *str, int *i, char *res);
 char	*expanded(char *str, t_sub_type type, t_shell *shell);
 
 /*parse.c*/
@@ -111,9 +113,15 @@ bool	is_std_fd(int fd);
 int		open_outfile(char *file, t_token_type type);
 bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
 int		open_infile(char *file);
-bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst);
+bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
+
+/*here_doc.c*/
+bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
+
 
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
 void	print_tokens_and_cmds(t_shell *shell);
+
+
 #endif

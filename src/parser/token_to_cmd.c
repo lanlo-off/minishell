@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 13:34:09 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 16:34:59 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/10 12:27:59 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static bool	handle_redir_in_token(t_token *token, t_cmd *cmd, t_shell *shell)
 	if (!new_redir)
 		return (false);
 	new_redir->type = token->type;
+	new_redir->file_quote_type = get_file_quote_type(token->next->subword);//necessaire pour savoir s'il faut expand le contenu du heredoc ou pas
 	new_redir->file = concat_expand_token(token->next->subword, shell);//il faut recuperer le nom du fichier (et pour ca il faut concatener tous les subwords apres les avoir expand)
 	if (!cmd->redirs_in)//s'il n'y a pas encore de redirections on dit que le new est le premier
 		cmd->redirs_in = new_redir;

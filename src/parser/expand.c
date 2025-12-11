@@ -6,13 +6,13 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 15:00:42 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:57 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:59:42 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	*join_and_free(char *s1, char *s2)
+char	*join_and_free(char *s1, char *s2)
 {
 	char	*res;
 
@@ -22,7 +22,7 @@ static char	*join_and_free(char *s1, char *s2)
 	return (res);
 }
 
-static char	*append_until_doll(char *str, int *i, char *res)
+char	*append_until_doll(char *str, int *i, char *res)
 {
 	int		start;
 	char	*lit;
