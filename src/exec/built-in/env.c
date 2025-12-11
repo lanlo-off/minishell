@@ -2,12 +2,12 @@
 
 //Check pas d'argument ou option
 
-bool ft_env(t_shell *shell) 
+int ft_env(t_cmd *cmd, t_shell *shell) 
 {
   t_env *temp;
   int lenArgs;
 
-  lenArgs = check_args(shell->cmds->av, 1);
+  lenArgs = check_args(cmd->av, 1);
   temp = shell->env;
   if (lenArgs == 1)
   {
@@ -18,9 +18,6 @@ bool ft_env(t_shell *shell)
     }
   }
   else
-  {
-    ft_putstr_fd("env: Too many arguments\n", 2);
-    return (false);
-  }
-  return (true);
+    return (EXIT_FAILURE);
+  return (EXIT_SUCCESS);
 }

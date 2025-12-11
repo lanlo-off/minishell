@@ -12,18 +12,16 @@ static void remove_env_node(t_shell *shell, t_env *node) {
   free(node);
 }
 
-bool ft_unset(t_shell *shell) 
+int ft_unset(t_cmd *cmd, t_shell *shell) 
 {
   int i;
   t_env *current;
   int key_len;
 
-  if (!shell->cmds->av[1])
-    return (true);
-  if (check_args(shell->cmds->av, 1) != 1)
-    return (false);
+  if (!cmd->av[1])
+    return (EXIT_SUCCESS);
   i = 1;
-  while (shell->cmds->av[i]) {
+  while (cmd->av[i]) {
     current = shell->env;
     key_len = ft_strlen(shell->cmds->av[i]);
     while (current) 
@@ -37,5 +35,5 @@ bool ft_unset(t_shell *shell)
     }
     i++;
   }
-  return (true);
+  return (EXIT_SUCCESS);
 }

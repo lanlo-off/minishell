@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:39:38 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 19:41:11 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/11 23:14:17 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ bool	fill_cmd(t_cmd *cmd, t_shell *shell)
 	cmd->path_to_free = false;
 	if (cmd->av && cmd->av[0])
 	{
-		if (!ft_strchr(cmd->av[0], '/'))//sin on ne trouve pas de / dans le nom de la commande -> on n'est pas en chemin absolu
+		if (is_builtin(cmd))
+			cmd->path = cmd->av[0];
+		else if (!ft_strchr(cmd->av[0], '/'))//si on ne trouve pas de / dans le nom de la commande -> on n'est pas en chemin absolu
 		{
 			cmd->path = get_path(cmd->av[0], shell->env);
 			if (!cmd->path)

@@ -1,6 +1,7 @@
 #include "../../../includes/minishell.h"
 
-void update_oldpwd(t_shell *shell) {
+void update_oldpwd(t_shell *shell)
+{
   t_env *temp;
   char *res;
   char *export_str;
@@ -23,7 +24,8 @@ void update_oldpwd(t_shell *shell) {
   }
 }
 
-bool update_pwd(t_shell *shell) {
+bool update_pwd(t_shell *shell)
+{
   char cwd[PATH_MAX];
   char *pwd;
 
@@ -38,25 +40,27 @@ bool update_pwd(t_shell *shell) {
   return (true);
 }
 
-bool ft_cd(t_shell *shell) {
+int ft_cd(t_cmd *cmd, t_shell *shell)
+{
   int cd;
   int lenargs;
   char *home_value;
 
   home_value = get_expanded_var("HOME", &shell->env, shell);
-  lenargs = check_args(shell->cmds->av, 2);
+  lenargs = check_args(cmd->av, 2);
   if (lenargs <= 0)
-    return (free(home_value), false);
+    return (free(home_value), EXIT_CMD_NOT_FOUND);
   if (lenargs == 1)
     cd = chdir(home_value);
   else
-    cd = chdir(shell->cmds->av[1]);
-  if (cd == -1) {
+    cd = chdir(cmd->av[1]);
+  if (cd == -1)
+  {
     perror("cd");
     free(home_value);
-    return (false);
+    return (EXIT_FAILURE);
   }
   update_pwd(shell);
   free(home_value);
-  return (true);
+  return (EXIT_SUCCESS);
 }

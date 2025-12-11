@@ -14,7 +14,7 @@ bool flag_nl(char *str)
 	return (true);
 }
 
-bool ft_echo(char **args)
+int ft_echo(char **args)
 {
   int i;
   bool print_newline;
@@ -33,5 +33,5 @@ bool ft_echo(char **args)
   }
   if (print_newline)
     ft_putstr_fd("\n", 1);
-  return (true);
+  return (EXIT_SUCCESS);
 }

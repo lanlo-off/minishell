@@ -1,41 +1,42 @@
 #include "../../includes/minishell.h"
 
-bool is_builtin(char *cmd) 
+bool is_builtin(t_cmd *cmd) 
 {
   if (!cmd)
     return (false);
-  if (ft_strncmp(cmd, "pwd", 4) == 0)
+  if (ft_strncmp(cmd->av[0], "pwd", 4) == 0)
     return (true);
-  if (ft_strncmp(cmd, "echo", 5) == 0)
+  if (ft_strncmp(cmd->av[0], "echo", 5) == 0)
     return (true);
-  if (ft_strncmp(cmd, "cd", 3) == 0)
+  if (ft_strncmp(cmd->av[0], "cd", 3) == 0)
     return (true);
-  if (ft_strncmp(cmd, "export", 6) == 0)
+  if (ft_strncmp(cmd->av[0], "export", 6) == 0)
     return (true);
-  if (ft_strncmp(cmd, "env", 4) == 0)
+  if (ft_strncmp(cmd->av[0], "env", 4) == 0)
     return (true);
-  if (ft_strncmp(cmd, "unset", 6) == 0)
+  if (ft_strncmp(cmd->av[0], "unset", 6) == 0)
     return (true);
-  if (ft_strncmp(cmd, "exit", 5) == 0)
+  if (ft_strncmp(cmd->av[0], "exit", 5) == 0)
     return (true);
   return (false);
 }
 
-void exec_builtin(t_shell *shell) {
+int exec_builtin(t_cmd *cmd, t_shell *shell) {
   if (ft_strncmp(shell->cmds->av[0], "pwd", 4) == 0)
-    ft_pwd(shell->cmds->av);
+    return (ft_pwd());
   if (ft_strncmp(shell->cmds->av[0], "echo", 5) == 0)
-    ft_echo(shell->cmds->av);
+    return (ft_echo(cmd->av));
   if (ft_strncmp(shell->cmds->av[0], "cd", 3) == 0)
-    ft_cd(shell);
+    return (ft_cd(cmd, shell));
   if (ft_strncmp(shell->cmds->av[0], "env", 4) == 0)
-    ft_env(shell);
+    return (ft_env(cmd, shell));
   if (ft_strncmp(shell->cmds->av[0], "export", 6) == 0)
-    ft_export(shell);
+    return (ft_export(cmd, shell));
   if (ft_strncmp(shell->cmds->av[0], "unset", 6) == 0)
-    ft_unset(shell);
+    return (ft_unset(cmd, shell));
   if (ft_strncmp(shell->cmds->av[0], "exit", 5) == 0)
-    ft_exit(shell);
+    return (ft_exit(cmd, shell));
+  return (false);
 }
 
 /* static void exec_single_builtin(t_shell *shell) {

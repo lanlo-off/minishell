@@ -14,12 +14,14 @@ SRCS = src/main.c\
 	src/exec/built-in/export.c\
 	src/exec/built-in/unset.c\
 	src/exec/heredoc.c\
+	src/free_error/clean_lexer.c\
+	src/free_error/clean_fork.c\
+	src/free_error/clean_parser.c\
 	src/free_error/clean.c\
 	src/free_error/free_lists.c\
 	src/init/init.c\
 	src/init/get_env.c\
 	src/init/get_path.c\
-	src/lexer/clean_lexer.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
 	src/lexer/operators.c\
@@ -27,7 +29,6 @@ SRCS = src/main.c\
 	src/lexer/split_sub_utils.c\
 	src/lexer/split_subwords.c\
 	src/lexer/split_token.c\
-	src/parser/clean_parser.c\
 	src/parser/expand.c\
 	src/parser/expand_utils.c\
 	src/parser/parse.c\

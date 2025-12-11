@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 15:05:00 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/11 23:04:09 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
-# include <editline/readline.h> // POUR MACOS
+// # include <editline/readline.h> // POUR MACOS
 
 /*=============== EXIT CODES =============== */
 # define EXIT_SUCCESS			0
@@ -117,24 +117,24 @@ t_sub_type	get_file_quote_type(t_subword *sub_lst);
 /*=============== EXEC =============== */
 /*exec.c*/
 //static void	exec_cmd(t_cmd *cmd, t_env *env);
-bool is_builtin(char *cmd);
-void exec_builtin(t_shell *shell);
+bool is_builtin(t_cmd *cmd);
+int exec_builtin(t_cmd *cmd, t_shell *shell);
 
-/*pipe.c*/
-void exec_pipeline(t_shell *shell);
+// /*pipe.c*/
+// void exec_pipeline(t_shell *shell);
 
-/*redirections.c*/
-bool handle_redirections(t_cmd *cmd);
+// /*redirections.c*/
+// bool handle_redirections(t_cmd *cmd);
 
 /*built-in*/
-bool ft_pwd(char **av);
-bool ft_cd(t_shell *shell);
-bool ft_exit(t_shell *t_shell);
-bool ft_export(t_shell *shell);
+int ft_pwd();
+int ft_cd(t_cmd *cmd, t_shell *shell);
+int ft_exit(t_cmd *cmd, t_shell *t_shell);
+int ft_export(t_cmd *cmd, t_shell *shell);
 bool export_var(t_shell *shell, char *arg);
-bool ft_unset(t_shell *shell);
-bool ft_env(t_shell *shell);
-bool ft_echo(char **args);
+int ft_unset(t_cmd *cmd, t_shell *shell);
+int ft_env(t_cmd *cmd, t_shell *shell);
+int ft_echo(char **args);
 
 /*utils*/
 int check_args(char **av, int nbArgs);
@@ -161,9 +161,14 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
 /*here_doc.c*/
 bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
 
+/*=============== FREE_ERROR =============== */
+
 /*clean.c*/
 void    clean_exit(t_shell *shell);
 void    clean_shell(t_shell *shell);
+
+/*clean_fork.c*/
+void	exit_fork(t_cmd *cmd, t_shell *shell);
 
 /*free_lists.c*/
 void free_env(t_env *env);

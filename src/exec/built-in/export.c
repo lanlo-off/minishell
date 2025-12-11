@@ -78,15 +78,21 @@ bool export_var(t_shell *shell, char *arg) {
   return (true);
 }
 
-bool ft_export(t_shell *shell) {
+int ft_export(t_cmd *cmd, t_shell *shell) {
   int i;
 
-  if (!shell->cmds->av[1])
-    return (true);
+  if (!cmd->av[1])
+  {
+    //faire le tri quand pas d'arg
+    return (EXIT_SUCCESS);
+  }
   i = 1;
-  while (shell->cmds->av[i]) {
-    export_var(shell, shell->cmds->av[i]);
+  while (cmd->av[i])
+  {
+    // if(!export_var(shell, cmd->av[i]))
+      //message d'erreur mais on continue
+    export_var(shell, cmd->av[i]);
     i++;
   }
-  return (true);
+  return (EXIT_SUCCESS);
 }

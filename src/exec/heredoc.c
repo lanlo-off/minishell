@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 15:08:16 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/11 20:29:05 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,5 +84,6 @@ bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 		free(exp_line);
 	}
 	cmd->fd_in = pipefd[0];
-	return (close(pipefd[1]), true);
+	//close(pipefd[1]);
+	return (true);
 }
