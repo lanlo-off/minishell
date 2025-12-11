@@ -1,5 +1,6 @@
 SRCS = src/main.c\
 	src/print_token.c\
+	src/signals/signals.c\
 	src/exec/loop.c\
 	src/exec/clean_loop.c\
 	src/exec/exec.c\
