@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 23:24:01 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/12 18:45:26 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,9 @@ static bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 
 static bool	handle_single_cmd(t_cmd *cmd, t_shell *shell)
 {
+	int	saved_stdin;
+	int	saved_stdout;
+	
 	if (!cmd)
 		return (true);
 	cmd->fd_in = STDIN_FILENO;
@@ -130,6 +133,7 @@ static bool	handle_single_cmd(t_cmd *cmd, t_shell *shell)
 			return (false);//exit_bad_fork(cmd), quel comportement ? Fin de la commande et on continue ? Fin de la chaine de cmd ?
 		else if (cmd->pid == 0)
 		{
+			(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
 			if (check_cmd(cmd))
 				exec_cmd(cmd, shell->envp, shell);
 			return (false);//car check_cmd ou execve a fail
@@ -143,8 +147,24 @@ static bool	handle_single_cmd(t_cmd *cmd, t_shell *shell)
 			return (true);
 		}
 	}
-	else
+	else//faut stocker les STD(dup), puis dup2, puis executer, puis restaurer(dup2), puis fermer
+	{
+		saved_stdin = dup(STDIN_FILENO);
+		saved_stdout = dup(STDOUT_FILENO);
+		if (cmd->fd_in >= 0)
+			dup2(cmd->fd_in, STDIN_FILENO);
+		if (cmd->fd_out >= 0)
+			dup2(cmd->fd_out, STDOUT_FILENO);
 		cmd->exit_status = exec_builtin(cmd, shell);
+		dup2(saved_stdin, STDIN_FILENO);
+		dup2(saved_stdout, STDOUT_FILENO);
+		close(saved_stdin);
+		close(saved_stdout);
+		if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
+			close(cmd->fd_in);
+		if (cmd->fd_out >= 0 && cmd->fd_out != STDOUT_FILENO)
+			close(cmd->fd_out);
+	}
 	return (cmd->exit_status == 0);//return 1 = true si ca a fonctionne, 0 = false sinon
 }
 

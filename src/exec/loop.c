@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 23:24:24 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/12 17:49:25 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	infinite_loop(t_shell *shell)
 			continue ;
 		shell->exit_code = wait_children(shell->cmds);
 		// printf("%s\n", shell->av);
-		print_tokens_and_cmds(shell);
+		// print_tokens_and_cmds(shell);
 		prepare_next_loop(shell);
 	}
 	return (shell->exit_code);
