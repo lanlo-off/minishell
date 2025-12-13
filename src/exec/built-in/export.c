@@ -1,6 +1,7 @@
 #include "../../../includes/minishell.h"
 
-static int is_valid_export_format(char *arg) {
+static int is_valid_export_format(char *arg)
+{
   int i;
 
   i = 0;
@@ -17,21 +18,8 @@ static int is_valid_export_format(char *arg) {
   return (1);
 }
 
-static t_env *find_env_node(t_shell *shell, char *key) {
-  t_env *current;
-  int key_len;
-
-  current = shell->env;
-  key_len = ft_strlen(key);
-  while (current) {
-    if (ft_strncmp(current->key, key, key_len + 1) == 0)
-      return (current);
-    current = current->next;
-  }
-  return (NULL);
-}
-
-static void append_env_node(t_shell *shell, char *key, char *value) {
+static void append_env_node(t_shell *shell, char *key, char *value)
+{
   t_env *new_node;
   t_env *last;
 
@@ -42,7 +30,8 @@ static void append_env_node(t_shell *shell, char *key, char *value) {
   new_node->value = value;
   new_node->next = NULL;
   new_node->prev = NULL;
-  if (!shell->env) {
+  if (!shell->env)
+  {
     shell->env = new_node;
     return;
   }
@@ -53,7 +42,8 @@ static void append_env_node(t_shell *shell, char *key, char *value) {
   new_node->prev = last;
 }
 
-bool export_var(t_shell *shell, char *arg) {
+bool export_var(t_shell *shell, char *arg)
+{
   char *key;
   char *value;
   int i;
@@ -69,7 +59,8 @@ bool export_var(t_shell *shell, char *arg) {
   if (!key || !value)
     return (free(key), free(value), false);
   node = find_env_node(shell, key);
-  if (node) {
+  if (node)
+  {
     free(node->value);
     node->value = value;
     free(key);
@@ -78,20 +69,49 @@ bool export_var(t_shell *shell, char *arg) {
   return (true);
 }
 
-int ft_export(t_cmd *cmd, t_shell *shell) {
+static char **env_to_tab(t_env *env)
+{
+  char **tab;
   int i;
+  char *tmp;
+
+  tab = malloc(sizeof(char *) * (get_env_size(env) + 1));
+  if (!tab)
+    return (NULL);
+  i = 0;
+  while (env)
+  {
+    tmp = ft_strjoin(env->key, "=\"");
+    tmp = ft_strjoin(tmp, env->value);
+    tmp = ft_strjoin(tmp, "\"");
+    tab[i] = tmp;
+    env = env->next;
+    i++;
+  }
+  tab[i] = NULL;
+  return (tab);
+}
+
+int ft_export(t_cmd *cmd, t_shell *shell)
+{
+  int i;
+  char **tab;
 
   if (!cmd->av[1])
   {
-    //faire le tri quand pas d'arg
+    tab = env_to_tab(shell->env);
+    if (tab)
+    {
+      sort_tab(tab);
+      print_and_free_tab(tab);
+    }
     return (EXIT_SUCCESS);
   }
   i = 1;
   while (cmd->av[i])
   {
-    // if(!export_var(shell, cmd->av[i]))
-      //message d'erreur mais on continue
-    export_var(shell, cmd->av[i]);
+    if (!export_var(shell, cmd->av[i]))
+      ft_putstr_fd("export: not valid value\n", 2);
     i++;
   }
   return (EXIT_SUCCESS);

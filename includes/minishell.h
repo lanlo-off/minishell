@@ -138,6 +138,10 @@ int ft_echo(char **args);
 
 /*utils*/
 int check_args(char **av, int nbArgs);
+t_env *find_env_node(t_shell *shell, char *key);
+void sort_tab(char **tab);
+void print_and_free_tab(char **tab);
+int get_env_size(t_env *env);
 
 /*loop.c*/
 int		infinite_loop(t_shell *shell);

@@ -16,8 +16,6 @@ void	clean_shell(t_shell *shell)
 {
   if (!shell)
  		return ;
-  if (shell->av)
-    free(shell->av);
   if (shell->env)
     free_env(shell->env);
  	return ;
@@ -25,7 +23,6 @@ void	clean_shell(t_shell *shell)
 
 void    clean_exit(t_shell *shell)
 {    
-  // clean_post_lexer(shell);
   clean_post_parser(shell);
-  shell->exit_code = 1;
+  //shell->exit_code = 1;
 }

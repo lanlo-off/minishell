@@ -197,14 +197,9 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 		if (!set_normal_fds(cmd, pipefd))
 			return (false) ;// car faut pas faire les autres commandes quand on a fail le pipe ? Mais comment faire pour ne pas faire les premieres commandes dont le pipe n'a pas fail ?
 		if (!handle_redir_in(cmd, cmd->redirs_in, shell))//Manage Heredoc ici et impression du message d'erreur si necessaire
-		{
 			continue ;// ou return (false) ?
-		}	
 		if (!handle_redir_out(cmd, cmd->redirs_out))
-		{
-			continue ;// ou return (false) ?
-		}	
-		//Si juste des redir et pas de cmd -> gerer les redir (HD et creation des outfile) et ne rien faire ensuite
+			continue ;// ou return (false) ? //Si juste des redir et pas de cmd -> gerer les redir (HD et creation des outfile) et ne rien faire ensuite
 		if (!check_cmd(cmd))
 			continue ;
 		if (!do_cmd(cmd, shell, pipefd))

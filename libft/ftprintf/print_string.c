@@ -1,36 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   print_string.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmiotla <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 14:54:09 by mmiotla           #+#    #+#             */
-/*   Updated: 2025/05/31 14:54:33 by mmiotla          ###   ########.fr       */
+/*   Created: 2025/05/31 14:48:36 by mmiotla           #+#    #+#             */
+/*   Updated: 2025/05/31 16:31:16 by mmiotla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include <unistd.h>
 
-int	ft_printf(const char *format, ...)
+#include <stdio.h>
+
+int	print_string(char *s)
 {
-	va_list	args;
-	int		count;
-	int		i;
+	int	i;
 
-  i = 0;
-  count = 0;
-  va_start(args, format);
-  while (format[i])
-  {
-    if (format[i] == '%' && format[i + 1])
-    {
-      count += dispatcher(format[i + 1], &args);
-      i += 2;
-	  }
-	  else
-      count += write(1, &format[i++], 1);
-  }
-  va_end(args);
-  return (count);
+	i = 0;
+	if (!s)
+		return (write(1, "(null)", 6));
+	while (s[i])
+		write (1, &s[i++], 1);
+	return (i);
 }

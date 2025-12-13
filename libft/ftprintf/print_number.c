@@ -1,36 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   print_number.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmiotla <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 14:54:09 by mmiotla           #+#    #+#             */
-/*   Updated: 2025/05/31 14:54:33 by mmiotla          ###   ########.fr       */
+/*   Created: 2025/05/31 14:49:23 by mmiotla           #+#    #+#             */
+/*   Updated: 2025/05/31 14:49:58 by mmiotla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include <unistd.h>
 
-int	ft_printf(const char *format, ...)
+int	print_number(int n)
 {
-	va_list	args;
+	long	nb;
 	int		count;
-	int		i;
+	char	c;
 
-  i = 0;
-  count = 0;
-  va_start(args, format);
-  while (format[i])
-  {
-    if (format[i] == '%' && format[i + 1])
-    {
-      count += dispatcher(format[i + 1], &args);
-      i += 2;
-	  }
-	  else
-      count += write(1, &format[i++], 1);
-  }
-  va_end(args);
-  return (count);
+	nb = n;
+	count = 0;
+	if (nb < 0)
+	{
+		count += write(1, "-", 1);
+		nb = -nb;
+	}
+	if (nb >= 10)
+		count += print_number(nb / 10);
+	c = nb % 10 + '0';
+	count += write(1, &c, 1);
+	return (count);
 }

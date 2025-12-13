@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_str.c                                   :+:      :+:    :+:   */
+/*   print_unsigned.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
+/*   By: mmiotla <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 17:05:06 by llechert          #+#    #+#             */
-/*   Updated: 2025/05/07 17:05:12 by llechert         ###   ########.fr       */
+/*   Created: 2025/05/31 14:51:19 by mmiotla           #+#    #+#             */
+/*   Updated: 2025/05/31 14:51:37 by mmiotla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include <unistd.h>
 
-int	ft_putchar(char c)
+int	print_unsigned(unsigned int n)
 {
-	write(1, &c, 1);
-	return (1);
-}
+	int		count;
+	char	c;
 
-int	ft_putstr(char *str)
-{
-	int	i;
-
-	i = 0;
-	if (!str)
-		return (ft_putstr("(null)"));
-	while (str[i])
-	{
-		i += ft_putchar(str[i]);
-	}
-	return (i);
+	count = 0;
+	if (n >= 10)
+		count += print_unsigned(n / 10);
+	c = n % 10 + '0';
+	count += write(1, &c, 1);
+	return (count);
 }

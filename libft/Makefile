@@ -48,9 +48,13 @@ SRCS_A = base/ft_isalpha.c \
 
 # ftprintf functions
 SRCS_A += ftprintf/ft_printf.c\
-	ftprintf/ft_putchar_str.c\
-	ftprintf/ft_putnbr_base.c\
-	ftprintf/ft_putptr.c
+	ftprintf/dispatcher.c\
+	ftprintf/print_char.c\
+	ftprintf/print_hex.c\
+	ftprintf/print_number.c\
+	ftprintf/print_pointer.c\
+	ftprintf/print_string.c\
+	ftprintf/print_unsigned.c
 
 # GNL functions
 SRCS_A += gnl/get_next_line.c\

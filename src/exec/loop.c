@@ -56,6 +56,11 @@ int	infinite_loop(t_shell *shell)
 		}
 		if (!execution(shell, shell->cmds))
 			continue ;
+		if (shell->flag_exit)
+    	{
+      		clean_exit(shell);
+      		return (shell->exit_code);
+    	}
 		shell->exit_code = wait_children(shell->cmds);
 		// printf("%s\n", shell->av);
 		// print_tokens_and_cmds(shell);

@@ -49,7 +49,10 @@ int ft_cd(t_cmd *cmd, t_shell *shell)
   home_value = get_expanded_var("HOME", &shell->env, shell);
   lenargs = check_args(cmd->av, 2);
   if (lenargs <= 0)
+  {
+    ft_putstr_fd("cd: not correct arguments\n", 2);
     return (free(home_value), EXIT_CMD_NOT_FOUND);
+  }
   if (lenargs == 1)
     cd = chdir(home_value);
   else

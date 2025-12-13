@@ -12,6 +12,7 @@ SRCS = src/main.c\
 	src/exec/built-in/env.c\
 	src/exec/built-in/echo.c\
 	src/exec/built-in/export.c\
+	src/exec/built-in/export2.c\
 	src/exec/built-in/unset.c\
 	src/exec/heredoc.c\
 	src/free_error/clean_lexer.c\

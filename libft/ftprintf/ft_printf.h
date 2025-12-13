@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: llechert <llechert@42.fr>                  +#+  +:+       +#+        */
+/*   By: mmiotla <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/02 12:27:19 by kevwang           #+#    #+#             */
-/*   Updated: 2025/06/18 14:09:10 by llechert         ###   ########.fr       */
+/*   Created: 2025/05/31 14:45:44 by mmiotla           #+#    #+#             */
+/*   Updated: 2025/05/31 14:45:47 by mmiotla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,16 @@
 # define FT_PRINTF_H
 
 # include <stdarg.h>
-# include <stdio.h>
 # include <unistd.h>
-# include <stdint.h>
 
-int	ft_printf(const char *str, ...);
-int	ft_putstr(char *str);
-int	ft_putchar(char c);
-int	ft_putnbr(int nb);
-int	ft_putnbr_base(unsigned int nb, char c, unsigned int base_size);
-int	ft_putptr(void *ptr);
+int ft_printf(const char *format, ...);
+int dispatcher(char spec, va_list *args);
+
+int	print_char(char c);
+int	print_string(char *s);
+int	print_number(int n);
+int	print_unsigned(unsigned int n);
+int	print_hex(unsigned int n, int uppercase);
+int	print_pointer(void *ptr);
 
 #endif

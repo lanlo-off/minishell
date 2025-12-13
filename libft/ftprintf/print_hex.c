@@ -1,36 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   print_hex.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmiotla <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/31 14:54:09 by mmiotla           #+#    #+#             */
-/*   Updated: 2025/05/31 14:54:33 by mmiotla          ###   ########.fr       */
+/*   Created: 2025/05/31 14:53:23 by mmiotla           #+#    #+#             */
+/*   Updated: 2025/05/31 14:53:49 by mmiotla          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include <unistd.h>
 
-int	ft_printf(const char *format, ...)
+int	print_hex(unsigned int n, int uppercase)
 {
-	va_list	args;
 	int		count;
-	int		i;
+	char	*base;
 
-  i = 0;
-  count = 0;
-  va_start(args, format);
-  while (format[i])
-  {
-    if (format[i] == '%' && format[i + 1])
-    {
-      count += dispatcher(format[i + 1], &args);
-      i += 2;
-	  }
-	  else
-      count += write(1, &format[i++], 1);
-  }
-  va_end(args);
-  return (count);
+	count = 0;
+	if (uppercase == 1)
+		base = "0123456789ABCDEF";
+	else
+		base = "0123456789abcdef";
+	if (n >= 16)
+		count += print_hex(n / 16, uppercase);
+	count += write(1, &base[n % 16], 1);
+	return (count);
 }
