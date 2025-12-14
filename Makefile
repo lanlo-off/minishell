@@ -23,6 +23,7 @@ SRCS = src/main.c\
 	src/init/init.c\
 	src/init/get_env.c\
 	src/init/get_path.c\
+	src/init/signals.c\
 	src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
 	src/lexer/operators.c\
@@ -62,7 +63,7 @@ $(OBJS_DIR):
 	mkdir -p $(OBJS_DIR)
 
 $(NAME): $(LIBFT) $(OBJS) 
-	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -lreadline -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -L/opt/homebrew/opt/readline/lib -lreadline -lhistory -o $(NAME)
 
 $(OBJS_DIR)/%.o: src/%.c $(HEADER) | $(OBJS_DIR)
 	@mkdir -p $(dir $@)

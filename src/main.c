@@ -12,20 +12,21 @@
 
 #include "../includes/minishell.h"
 
-int	main(int ac, char **av, char **envp)
-{
-	t_shell	shell;
-	int		exit_code;
-	
-	(void)av;
+int g_signal_received = 0;
+
+int main(int ac, char **av, char **envp) {
+  t_shell shell;
+  int exit_code;
+
+  (void)av;
 	if (ac != 1)
 	{
-		printf("./minishell to launch the program");
-		return (0);
-	}
-	init_structs(&shell, envp);
-	exit_code = infinite_loop(&shell);
-	clear_history(); // POUR MACOS sinon rlclear_history
-	clean_shell(&shell);
+    printf("./minishell to launch the program");
+    return (0);
+  }
+  init_structs(&shell, envp);
+  exit_code = infinite_loop(&shell);
+  clear_history(); // POUR MACOS sinon rlclear_history
+  clean_shell(&shell);
 	return(exit_code);
 }
