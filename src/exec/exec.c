@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 13:40:42 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:40:03 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void exec_cmd(t_cmd *cmd, char **envp, t_shell *shell)
 	else if (cmd->fd_in >= 0 && cmd->fd_out >= 0)
 		execve(cmd->path, cmd->av, envp);
 	perror("execve");
-	// exit fork aussi car faut kill ce processus ??
+	exit_fork(cmd, shell);// exit fork aussi car faut kill ce processus ??
 }
 
 bool do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
@@ -101,7 +101,13 @@ static bool handle_single_cmd(t_cmd *cmd, t_shell *shell)
 
 /**
  * @brief boucle d'execution des commandes successives
- * Chaque boucle se decompose
+ * Chaque boucle se decompose :
+ * 1 - Set les fds classiques et pipe (si pipe fail on arrete toute la chaine de cmd)
+ * 2 - Modifie les fds en cas de redirection
+ * 3 - Check la cmd (path entier, nom de la commande etc...)
+ * 4 - Tente de lancer la commande
+ * On passe toujours a la cmd suivante meme si fail une des etapes 
+ * SAUF POUR ERREUR DE PIPE QUI ARRETE TOUTE LA CHAINE DE CMD
  *
  * @param shell
  * @param cmd_lst
@@ -121,16 +127,15 @@ bool execution(t_shell *shell, t_cmd *cmd_lst)
 		return (handle_single_cmd(cmd, shell));
 	while (cmd)
 	{
-		if (!set_normal_fds(cmd, pipefd))
+		if (!set_normal_fds(cmd, pipefd))//Trouver un moyer d'arreter toutes les commandes
 			return (false); // car faut pas faire les autres commandes quand on a fail le pipe ? Mais comment faire pour ne pas faire les premieres commandes dont le pipe n'a pas fail ?
-		if (!handle_redir_in(cmd, cmd->redirs_in, shell)) // Manage Heredoc ici et impression du message d'erreur si necessaire
-			continue; // ou return (false) ?
-		if (!handle_redir_out(cmd, cmd->redirs_out))
-			continue; // ou return (false) ? //Si juste des redir et pas de cmd -> gerer les redir (HD et creation des outfile) et ne rien faire ensuite
-		if (!check_cmd(cmd))
+		if (!handle_redir_in(cmd, cmd->redirs_in, shell) // Manage Heredoc ici et impression du message d'erreur si necessaire
+			|| !handle_redir_out(cmd, cmd->redirs_out)
+			|| !check_cmd(cmd) || !do_cmd(cmd, shell, pipefd))
+		{
+			cmd = cmd->next;
 			continue;
-		if (!do_cmd(cmd, shell, pipefd))
-			continue; // ou return (false) ?
+		}
 		cmd = cmd->next;
 	}
 	return (true);

@@ -6,39 +6,11 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 13:14:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 13:39:53 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 14:19:56 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/**
- * @brief Pour verifier si on l'envoie a execve et sinon imprimer le message
- * d'erreur
- *
- * @param cmd
- * @return true
- * @return false
- */
-bool	check_cmd(t_cmd *cmd)
-{
-	if (!cmd->av)
-	{
-		perror("Could not split cmd");
-		return (false);
-	}
-	if (!cmd->av[0])
-	{
-		perror("Command empty");
-		return (false);
-	}
-	if (!cmd->path)
-	{
-		ft_putendl_fd("path not found", 2);
-		return (false);
-	}
-	return (true);
-}
 
 bool	handle_fds_single_cmd(t_cmd *cmd, t_shell *shell)
 {
