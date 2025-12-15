@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:15:56 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 19:16:07 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:48:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ bool is_builtin(t_cmd *cmd)
 int exec_builtin(t_cmd *cmd, t_shell *shell)
 {
 	if (ft_strncmp(shell->cmds->av[0], "pwd", 4) == 0)
-		return (ft_pwd());
+		return (ft_pwd(cmd));
 	if (ft_strncmp(shell->cmds->av[0], "echo", 5) == 0)
 		return (ft_echo(cmd->av));
 	if (ft_strncmp(shell->cmds->av[0], "cd", 3) == 0)

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:22:51 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:47:45 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_sub_type get_file_quote_type(t_subword *sub_lst);
 /*=============== EXEC =============== */
 
 /*built-in*/
-int		ft_pwd();
+int		ft_pwd(t_cmd *cmd);
 int		ft_cd(t_cmd *cmd, t_shell *shell);
 int		ft_exit(t_cmd *cmd, t_shell *t_shell);
 int		ft_export(t_cmd *cmd, t_shell *shell);
