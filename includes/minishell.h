@@ -175,6 +175,8 @@ void	exit_fork(t_cmd *cmd, t_shell *shell);
 /*free_lists.c*/
 void	free_env(t_env *env);
 
+void heredoc_sigint_handler(int sig);
+
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
 void	print_tokens_and_cmds(t_shell *shell);
 

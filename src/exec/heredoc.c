@@ -43,13 +43,6 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	return (res);
 }
 
-static void heredoc_sigint_handler(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-	exit(130);
-}
-
 /**
  * @brief Create a heredoc pipe (permet de gerer jusqu'a 1MB de char donc
  * suffisant, pas besoin de creer un doc ?!) Ecris ce qui arrive du here_doc
