@@ -9,7 +9,7 @@ void handle_sigint(int sig)
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	// rl_redisplay();
+	rl_redisplay();
 }
 
 void init_signals(void)
