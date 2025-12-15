@@ -1,3 +1,5 @@
 {
-	"makefile.configureOnOpen": false
+	"makefile.configureOnOpen": false,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false
 }

@@ -1,6 +1,7 @@
 SRCS = src/main.c\
-	src/print_token.c\
-	src/exec/loop.c\
+	src/print_token.c
+
+SRCS += src/exec/loop.c\
 	src/exec/clean_loop.c\
 	src/exec/exec.c\
 	src/exec/exec_utils.c\
@@ -15,23 +16,28 @@ SRCS = src/main.c\
 	src/exec/built-in/export2.c\
 	src/exec/built-in/unset.c\
 	src/exec/heredoc.c\
-	src/free_error/clean_lexer.c\
+	src/exec/single_cmd_utils.c
+
+SRCS += src/free_error/clean_lexer.c\
 	src/free_error/clean_fork.c\
 	src/free_error/clean_parser.c\
 	src/free_error/clean.c\
-	src/free_error/free_lists.c\
-	src/init/init.c\
+	src/free_error/free_lists.c
+
+SRCS += src/init/init.c\
 	src/init/get_env.c\
 	src/init/get_path.c\
-	src/init/signals.c\
-	src/lexer/lexer_utils.c\
+	src/init/signals.c
+
+SRCS += src/lexer/lexer_utils.c\
 	src/lexer/lexer.c\
 	src/lexer/operators.c\
 	src/lexer/quotes.c\
 	src/lexer/split_sub_utils.c\
 	src/lexer/split_subwords.c\
-	src/lexer/split_token.c\
-	src/parser/expand.c\
+	src/lexer/split_token.c
+
+SRCS += src/parser/expand.c\
 	src/parser/expand_utils.c\
 	src/parser/parse.c\
 	src/parser/utils.c\

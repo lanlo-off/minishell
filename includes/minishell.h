@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 23:04:09 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 13:43:09 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 // # include <editline/readline.h> // POUR MACOS
 extern int g_signal_received;
 
@@ -111,42 +112,37 @@ bool manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell);
 t_sub_type get_file_quote_type(t_subword *sub_lst);
 
 /*=============== EXEC =============== */
-/*exec.c*/
-// static void	exec_cmd(t_cmd *cmd, t_env *env);
-bool is_builtin(t_cmd *cmd);
-int exec_builtin(t_cmd *cmd, t_shell *shell);
-
-// /*pipe.c*/
-// void exec_pipeline(t_shell *shell);
-
-// /*redirections.c*/
-// bool handle_redirections(t_cmd *cmd);
 
 /*built-in*/
-int ft_pwd();
-int ft_cd(t_cmd *cmd, t_shell *shell);
-int ft_exit(t_cmd *cmd, t_shell *t_shell);
-int ft_export(t_cmd *cmd, t_shell *shell);
-bool export_var(t_shell *shell, char *arg);
-int ft_unset(t_cmd *cmd, t_shell *shell);
-int ft_env(t_cmd *cmd, t_shell *shell);
-int ft_echo(char **args);
+int		ft_pwd();
+int		ft_cd(t_cmd *cmd, t_shell *shell);
+int		ft_exit(t_cmd *cmd, t_shell *t_shell);
+int		ft_export(t_cmd *cmd, t_shell *shell);
+bool	export_var(t_shell *shell, char *arg);
+int		ft_unset(t_cmd *cmd, t_shell *shell);
+int		ft_env(t_cmd *cmd, t_shell *shell);
+int		ft_echo(char **args);
 
-/*utils*/
-int check_args(char **av, int nbArgs);
+/*export2.c*/
 t_env *find_env_node(t_shell *shell, char *key);
 void sort_tab(char **tab);
 void print_and_free_tab(char **tab);
 int get_env_size(t_env *env);
 
-/*loop.c*/
-int infinite_loop(t_shell *shell);
-
 /*clean_loop.c*/
 void prepare_next_loop(t_shell *shell);
 
-/*exec0.c*/
+/*exec_utils.c*/
+bool is_builtin(t_cmd *cmd);
+int exec_builtin(t_cmd *cmd, t_shell *shell);
+void close_fds(int fd_in, int fd_out);
+
+/*exec.c*/
+void exec_cmd(t_cmd *cmd, char **envp, t_shell *shell);
 bool execution(t_shell *shell, t_cmd *cmd_lst);
+
+/*here_doc.c*/
+bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
 
 /*loop.c*/
 int infinite_loop(t_shell *shell);
@@ -158,8 +154,14 @@ bool handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
 int open_infile(char *file);
 bool handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
 
-/*here_doc.c*/
-bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
+/*single_cmd_utils.c*/
+void	single_builtin(t_cmd *cmd, int saved_in, int saved_out, t_shell *shell);
+bool	fork_single_cmd(t_cmd *cmd, t_shell *shell);
+bool	handle_fds_single_cmd(t_cmd *cmd, t_shell *shell);
+bool	check_cmd(t_cmd *cmd);
+
+/*utils*/
+int check_args(char **av, int nbArgs);
 
 /*=============== FREE_ERROR =============== */
 
