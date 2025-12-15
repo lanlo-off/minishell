@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:14:26 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/11 23:24:37 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:20:03 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst)
 	while (redir)
 	{
 		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))//si on a deja un fd ouvert mais qu'on va faire une redir, on peut le fermer il sert a rien
-			close(cmd->fd_out);
+			close_fds(&cmd->fd_out, NULL);
 		cmd->fd_out = open_outfile(redir->file, redir->type);
 		if (cmd->fd_out < 0)
 			return (false);
@@ -77,7 +77,7 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell)
 	while (redir)
 	{
 		if (cmd->fd_in >= 0 && !is_std_fd(cmd->fd_in))//si on a deja un fd ouvert mais qu'on va faire une redir, on peut le fermer il sert a rien
-			close(cmd->fd_in);
+			close_fds(&cmd->fd_in, NULL);
 		if (redir->type == HEREDOC && !create_heredoc(cmd, redir, shell))//on change le cmd->fd_in dans la fonction si erreur heredoc on l'ecrit ici
 			return (false);
 		else if (redir->type == REDIR_IN)

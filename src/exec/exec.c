@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:40:03 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:19:19 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ bool do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 	else if (cmd->pid == 0)
 	{
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
-		close_fds(pipefd[0], pipefd[1]);
-		close_fds(cmd->fd_in, -1);
+		close_fds(&pipefd[0], &pipefd[1]);
+		close_fds(&cmd->fd_in, NULL);
 		exec_cmd(cmd, shell->envp, shell);
 		return (false); // si j'arrive ici c'est qu'execve a fail
 	}
 	else
 	{
 		if (pipefd[1] >= 0 && !is_std_fd(pipefd[1]))
-			close(pipefd[1]);
+			close_fds(&pipefd[1], NULL);
 		if (cmd->prev && cmd->prev->fd_out != STDOUT_FILENO)
-			close(cmd->prev->fd_out);
+			close_fds(&cmd->prev->fd_out, NULL);
 		if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
-			close(cmd->fd_in);
+			close_fds(&cmd->fd_in, NULL);
 		if (cmd->next)// si on n'est pas a la derniere commande
 			cmd->fd_out = pipefd[0]; // on ecrit dans le pipe pour envoyer a la prochaine commande
 		return (true);

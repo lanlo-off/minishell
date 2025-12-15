@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 13:14:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:19:56 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 15:31:15 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ bool	fork_single_cmd(t_cmd *cmd, t_shell *shell)
 	else
 	{
 		if (cmd->prev && cmd->prev->fd_out != STDOUT_FILENO)
-			close(cmd->prev->fd_out);
+			close_fds(&cmd->prev->fd_out, NULL);
 		if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
-			close(cmd->fd_in);
+			close_fds(&cmd->fd_in, NULL);
 		return (true);
 	}
 }
@@ -66,10 +66,9 @@ void	single_builtin(t_cmd *cmd, int saved_in, int saved_out, t_shell *shell)
 	cmd->exit_status = exec_builtin(cmd, shell);
 	dup2(saved_in, STDIN_FILENO);
 	dup2(saved_out, STDOUT_FILENO);
-	close(saved_in);
-	close(saved_out);
+	close_fds(&saved_in, &saved_out);
 	if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
-		close(cmd->fd_in);
+		close_fds(&cmd->fd_in, NULL);
 	if (cmd->fd_out >= 0 && cmd->fd_out != STDOUT_FILENO)
-		close(cmd->fd_out);
+		close_fds(&cmd->fd_out, NULL);
 }

@@ -22,18 +22,27 @@ bool	check_cmd(t_cmd *cmd)
 	}
 	if (!cmd->path)
 	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(cmd->av[0], 2);
+		ft_putstr_fd(": ", 2);
 		ft_putendl_fd("path not found", 2);
 		return (false);
 	}
 	return (true);
 }
 
-void close_fds(int fd_in, int fd_out)
+void close_fds(int *fd_in, int *fd_out)
 {
-	if (fd_in >= 0 && !is_std_fd(fd_in))
-		close(fd_in);
-	if (fd_out >= 0 && is_std_fd(fd_out))
-		close(fd_out);
+	if (fd_in && *fd_in >= 0 && !is_std_fd(*fd_in))
+	{
+		close(*fd_in);
+		*fd_in = -1;
+	}
+	if (fd_out && *fd_out >= 0 && is_std_fd(*fd_out))
+	{
+		close(*fd_out);
+		*fd_out = -1;
+	}
 }
 
 bool is_builtin(t_cmd *cmd)
@@ -73,5 +82,5 @@ int exec_builtin(t_cmd *cmd, t_shell *shell)
 		return (ft_unset(cmd, shell));
 	if (ft_strncmp(shell->cmds->av[0], "exit", 5) == 0)
 		return (ft_exit(cmd, shell));
-	return (false);
+	return (1);
 }
