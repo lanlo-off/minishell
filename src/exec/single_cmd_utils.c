@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 13:14:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:19:56 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:24:39 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,17 @@ bool	fork_single_cmd(t_cmd *cmd, t_shell *shell)
 	else if (cmd->pid == 0)
 	{
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
+		close_fds(cmd->fd_in, cmd->fd_out);
 		if (check_cmd(cmd))
 			exec_cmd(cmd, shell->envp, shell);
-		return (false); // car check_cmd ou execve a fail
+		exit_fork(cmd, shell);// car check_cmd ou execve a fail
+		return (false);
 	}
 	else
 	{
-		if (cmd->prev && cmd->prev->fd_out != STDOUT_FILENO)
-			close(cmd->prev->fd_out);
-		if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
+		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))
+			close(cmd->fd_out);
+		if (cmd->fd_in >= 0 && !is_std_fd(cmd->fd_in))
 			close(cmd->fd_in);
 		return (true);
 	}

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:39:38 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:15:55 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 18:10:19 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,5 +53,6 @@ bool	fill_cmd(t_cmd *cmd, t_shell *shell)
 	cmd->fd_out = -1;
 	cmd->next = NULL;
 	cmd->prev = NULL;
+	cmd->pid = -1;
 	return (true);
 }

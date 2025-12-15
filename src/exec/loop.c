@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 11:53:40 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 18:49:45 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,26 +17,30 @@ static int	wait_children(t_cmd *cmd_lst) {
 	int code;
 
 	if (!cmd_lst)
-	return (0);
+		return (0);
 	cmd = cmd_lst;
-	while (cmd->next) {
-	waitpid(cmd->pid, &cmd->exit_status, 0);
-	cmd = cmd->next;
+	while (cmd->next)
+	{
+		if (cmd->pid >= 0)
+			waitpid(cmd->pid, &cmd->exit_status, 0);
+		cmd = cmd->next;
 	}
-	waitpid(cmd->pid, &cmd->exit_status, 0); // pour le dernier
+	if (cmd->pid >= 0)
+		waitpid(cmd->pid, &cmd->exit_status, 0); // pour le dernier
 	code = cmd->exit_status;// on recupere le dernier exit code avant de le rendre intelligible ci dessous
 	if (WIFEXITED(code))
-	return (WEXITSTATUS(code));
+		return (WEXITSTATUS(code));
 	else if (WIFSIGNALED(code))
-	return (128 + WTERMSIG(code));
+		return (128 + WTERMSIG(code));
 	else
-	return (1);// pq return 1 et pas 0 a cet endroit ?
+		return (1);// pq return 1 et pas 0 a cet endroit ?
 }
 
 int infinite_loop(t_shell *shell)
 {
 	while (1)
 	{
+		g_signal_received = 0;
 		shell->av = readline("AU SUIVANT> ");
 		if (!shell->av)
 		{
@@ -58,7 +62,10 @@ int infinite_loop(t_shell *shell)
 			continue;
 		}
 		if (!execution(shell, shell->cmds))
+		{
+			clean_post_parser(shell); // inclut clean lexer dedans !
 			continue;
+		}
 		if (shell->flag_exit)
 		{
 			clean_exit(shell);

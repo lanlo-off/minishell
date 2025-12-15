@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 14:40:03 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 19:21:32 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void exec_cmd(t_cmd *cmd, char **envp, t_shell *shell)
 		cmd->exit_status = exec_builtin(cmd, shell);
 		exit_fork(cmd, shell);// on free tout + close fd_in et out ? puis fait un exit dedans pour kill l'enfant
 	}
-	else if (cmd->fd_in >= 0 && cmd->fd_out >= 0)
+	// else if (cmd->fd_in >= 0 && cmd->fd_out >= 0)
 		execve(cmd->path, cmd->av, envp);
 	perror("execve");
 	exit_fork(cmd, shell);// exit fork aussi car faut kill ce processus ??
@@ -62,7 +62,7 @@ bool do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 	{
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
 		close_fds(pipefd[0], pipefd[1]);
-		close_fds(cmd->fd_in, -1);
+		close_fds(cmd->fd_in, cmd->fd_out);
 		exec_cmd(cmd, shell->envp, shell);
 		return (false); // si j'arrive ici c'est qu'execve a fail
 	}

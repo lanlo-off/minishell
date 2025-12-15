@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 15:18:03 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 10:10:03 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/15 18:48:02 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void	clean_token(t_token **token_list)
 		to_free = tmp;
 		tmp = tmp->next;
 		clean_subword(&to_free->subword);
+		free(to_free->full_token);
 		free(to_free);
 	}
 }
