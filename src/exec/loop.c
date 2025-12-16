@@ -6,13 +6,14 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 18:49:45 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 22:29:01 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	wait_children(t_cmd *cmd_lst) {
+static int	wait_children(t_cmd *cmd_lst)
+{
 	t_cmd *cmd;
 	int code;
 
@@ -21,19 +22,23 @@ static int	wait_children(t_cmd *cmd_lst) {
 	cmd = cmd_lst;
 	while (cmd->next)
 	{
-		if (cmd->pid >= 0)
+		if (cmd->pid > 0)
 			waitpid(cmd->pid, &cmd->exit_status, 0);
 		cmd = cmd->next;
 	}
-	if (cmd->pid >= 0)
-		waitpid(cmd->pid, &cmd->exit_status, 0); // pour le dernier
-	code = cmd->exit_status;// on recupere le dernier exit code avant de le rendre intelligible ci dessous
-	if (WIFEXITED(code))
-		return (WEXITSTATUS(code));
-	else if (WIFSIGNALED(code))
-		return (128 + WTERMSIG(code));
-	else
-		return (1);// pq return 1 et pas 0 a cet endroit ?
+	if (cmd->pid > 0)/* Si un enfant a été attendu, interpréter le status; sinon, renvoyer tel quel (builtin ou erreur avant fork) */
+		waitpid(cmd->pid, &cmd->exit_status, 0);
+	code = cmd->exit_status;
+	if (cmd->pid > 0)
+	{
+		if (WIFEXITED(code))
+			return (WEXITSTATUS(code));
+		else if (WIFSIGNALED(code))
+			return (128 + WTERMSIG(code));
+		else
+			return (1);
+	}
+	return (code);
 }
 
 int infinite_loop(t_shell *shell)
@@ -63,6 +68,7 @@ int infinite_loop(t_shell *shell)
 		}
 		if (!execution(shell, shell->cmds))
 		{
+			shell->exit_code = wait_children(shell->cmds);//sinon shell recupere pas le code
 			clean_post_parser(shell); // inclut clean lexer dedans !
 			continue;
 		}

@@ -27,7 +27,7 @@ char	*get_expanded_var(char *var, t_env **env, t_shell *shell)
 		return (ft_strdup(""));
 	if (!ft_strcmp(var, "$") || !ft_strcmp(var, "#"))//cas particuliers qu'on veut ignorer
 		return (ft_strdup(""));
-	if (!ft_strcmp(var, "$?"))//cas particulier dernier exit code
+	if (!ft_strcmp(var, "?"))//cas particulier dernier exit code (var contient "?" pas "$?")
 		return (ft_itoa(shell->exit_code));//A bien garder entre chaque boucle voir comment gerer si on commence par faire $? dans minishell
 	tmp = *env;
 	while (tmp)

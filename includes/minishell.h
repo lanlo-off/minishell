@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 17:25:41 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 22:14:33 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,6 @@ void	exit_fork(t_cmd *cmd, t_shell *shell);
 
 /*free_lists.c*/
 void	free_env(t_env *env);
-
 void heredoc_sigint_handler(int sig);
 
 /*print_error.c*/

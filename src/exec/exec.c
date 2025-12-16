@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 17:28:35 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 21:38:38 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,7 @@ bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 {
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		return (false); // exit_bad_fork(cmd), quel comportement ? Fin de la
-						// commande et on continue ? Fin de la chaine de cmd ?
+		return (print_error(NULL, errno, ERR_FORK, cmd), false);
 	else if (cmd->pid == 0)
 	{
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));

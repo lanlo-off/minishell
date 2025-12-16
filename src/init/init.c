@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:39:38 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 18:10:19 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 22:27:31 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ void	init_structs(t_shell *shell, char **envp)
 bool	fill_cmd(t_cmd *cmd, t_shell *shell)
 {
 	if (!cmd)
-	return (false);
+		return (false);
 	cmd->path_to_free = false;
+	cmd->exit_status = 0;
 	if (cmd->av && cmd->av[0])
 	{
 	if (is_builtin(cmd))
@@ -39,11 +40,6 @@ bool	fill_cmd(t_cmd *cmd, t_shell *shell)
 	else if (!ft_strchr(cmd->av[0], '/'))//si on ne trouve pas de / dans le nom de la commande -> on n'est pas en chemin absolu
 	{
 		cmd->path = get_path(cmd->av[0], shell->env);
-		// if (!cmd->path)
-		// {
-		// ft_putstr_fd("PAS ACCES OU PAS TROUVE LE PATH DE LA CMD\n", 2);
-		// return (false);
-		// }
 		cmd->path_to_free = true;
 	}
 	else//si on nous a donne le chemin absolu (a verifier car peut etre que ca fonctionne pas si la personne envoie ../../(jusqu'a arriver au home)/user/bin/cat)

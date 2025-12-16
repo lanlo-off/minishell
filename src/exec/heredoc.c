@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 16:59:41 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 22:44:12 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 		return (print_error(NULL, errno, ERR_PIPE, cmd), false);
 	pid = fork();
 	if (pid == -1)
-		return (perror("fork"), close_fds_ptr(&pipefd[0], &pipefd[1]), false);//close(pipefd[0]), close(pipefd[1]), false);
+		return (print_error(NULL, errno, ERR_FORK, cmd), close_fds_ptr(&pipefd[0], &pipefd[1]), false);//close(pipefd[0]), close(pipefd[1]), false);
 	if (pid == 0)
 	{
 		close_fds_ptr(&pipefd[0], NULL);//close(pipefd[0]);
@@ -108,9 +108,13 @@ bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 	waitpid(pid, &status, 0);
 	init_signals();
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
+	{
+		cmd->exit_status = 130;
 		return (close_fds_ptr(&pipefd[0], NULL), false);//close(pipefd[0]), false);
+	}
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
+		cmd->exit_status = 130;
 		g_signal_received = 130;
 		return (close_fds_ptr(&pipefd[0], NULL), false);//close(pipefd[0]), false);
 	}
