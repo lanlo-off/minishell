@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:14:26 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 11:01:46 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:03:18 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool	is_std_fd(int fd)
 	return (false);
 }
 
-int	open_outfile(char *file, t_token_type type)
+int	open_outfile(char *file, t_token_type type, t_cmd *cmd)
 {
 	int	fd;
 
@@ -33,7 +33,7 @@ int	open_outfile(char *file, t_token_type type)
 	else
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-		ft_putstr_fd("PAS REUSSI A LIRE L'INFILE!\n", 2);
+		print_error(file, errno, ERR_REDIR, cmd);
 	return (fd);
 }
 
@@ -48,7 +48,7 @@ bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst)
 	{
 		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))//si on a deja un fd ouvert mais qu'on va faire une redir, on peut le fermer il sert a rien
 			close_fds_ptr(&cmd->fd_out, NULL);//close(cmd->fd_out);
-		cmd->fd_out = open_outfile(redir->file, redir->type);
+		cmd->fd_out = open_outfile(redir->file, redir->type, cmd);
 		if (cmd->fd_out < 0)
 			return (false);
 		redir = redir->next;
@@ -56,14 +56,14 @@ bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst)
 	return (true);
 }
 
-int	open_infile(char *file)
+int	open_infile(char *file, t_cmd *cmd)
 {
 	int	fd;
 
 	fd = -1;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		ft_putstr_fd("PAS REUSSI A LIRE L'INFILE\n", 2);
+		print_error(file, errno, ERR_REDIR, cmd);
 	return (fd);
 }
 
@@ -82,7 +82,7 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell)
 			return (false);
 		else if (redir->type == REDIR_IN)
 		{
-			cmd->fd_in = open_infile(redir->file);
+			cmd->fd_in = open_infile(redir->file, cmd);
 			if (cmd->fd_in < 0)
 				return (false);
 		}

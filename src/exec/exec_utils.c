@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:15:56 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 10:50:48 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:33:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,20 +22,11 @@
  */
 bool	check_cmd(t_cmd *cmd)
 {
-	if (!cmd->av)
-	{
-		perror("Could not split cmd");
+	if (!cmd->av || !cmd->av[0])
 		return (false);
-	}
-	if (!cmd->av[0])
-	{
-		perror("Command empty");
-		return (false);
-	}
 	if (!cmd->path)
 	{
-		ft_putstr_fd(cmd->av[0], 2);
-		ft_putendl_fd(": path not found", 2);
+		print_error(cmd->av[0], 0, ERR_CMD_NOT_FOUND, cmd);
 		return (false);
 	}
 	return (true);

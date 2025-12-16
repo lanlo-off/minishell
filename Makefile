@@ -22,7 +22,8 @@ SRCS += src/free_error/clean_lexer.c\
 	src/free_error/clean_fork.c\
 	src/free_error/clean_parser.c\
 	src/free_error/clean.c\
-	src/free_error/free_lists.c
+	src/free_error/free_lists.c\
+	src/free_error/print_error.c
 
 SRCS += src/init/init.c\
 	src/init/get_env.c\

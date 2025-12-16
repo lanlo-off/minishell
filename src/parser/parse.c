@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 10:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/09 19:44:18 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:17:57 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,13 @@ static bool	create_cmds(t_shell *shell, t_token *token)
 		else if (!manage_word_and_redir(token, new, shell))
 			return (clean_cmd(new), false);
 		get_next_useful_token(&token, token->type);//Si token->type == REDIR on avance de 2, sinon on avance de 1
-		// if (token->type != WORD && token->type != PIPE)
-		// 	token = token->next;
-		// token = token->next;
 	}
 	if (new && (new->av || new->redirs_in || new->redirs_out))
 		return (append_cmd_to_shell(shell, new));
 	return (free(new), true);
 }
 
-static bool	check_redir(t_token **token_lst)
+static bool	check_redir(t_token **token_lst, t_shell *shell)
 {
 	t_token	*tmp;
 	bool	prev_redir;
@@ -74,7 +71,7 @@ static bool	check_redir(t_token **token_lst)
 	while (tmp)
 	{
 		if (prev_redir == true && tmp->type != WORD)
-			return (ft_putstr_fd("ERROR NO WORD AFTER REDIR\n", 2), false);
+			return (print_error_parser("<<, <, > or >>", shell), false);
 		else if (tmp->type == WORD || tmp->type == PIPE)
 			prev_redir = false;
 		else
@@ -82,11 +79,11 @@ static bool	check_redir(t_token **token_lst)
 		tmp = tmp->next;
 	}
 	if (prev_redir)
-		return (ft_putstr_fd("ERROR NO WORD AFTER REDIR\n", 2), false);
+		return (print_error_parser("<<, <, > or >>", shell), false);
 	return (true);
 }
 
-static bool	check_pipes(t_token **token_lst)
+static bool	check_pipes(t_token **token_lst, t_shell *shell)
 {
 	t_token	*tmp;
 	bool	prev_pipe;//true si le token precedent est un type (verifie pas de double pipe)
@@ -94,14 +91,14 @@ static bool	check_pipes(t_token **token_lst)
 	prev_pipe = false;
 	tmp = *token_lst;
 	if (tmp->type == PIPE)
-		return (ft_putstr_fd("ERROR PIPE IN FIRST\n", 2), false);
+		return (print_error_parser("|" , shell), false);
 	tmp = tmp->next;
 	while (tmp)
 	{
 		if (tmp->type == PIPE)
 		{
 			if (prev_pipe == true)
-				return (ft_putstr_fd("ERROR DOUBLE PIPE\n", 2), false);
+				return (print_error_parser("|", shell), false);
 			prev_pipe = true;
 		}
 		else
@@ -109,7 +106,7 @@ static bool	check_pipes(t_token **token_lst)
 		tmp = tmp->next;
 	}
 	if (prev_pipe)
-		return (ft_putstr_fd("ERROR PIPE IN LAST\n", 2), false);
+		return (print_error_parser("|", shell), false);
 	return (true);
 }
 
@@ -117,14 +114,14 @@ bool	parser(t_shell *shell, t_token **token_lst)
 {
 	if (!shell || !token_lst || !*token_lst)
 		return (true);
-	if (!check_pipes(token_lst))//pas d'alloc ici
+	if (!check_pipes(token_lst, shell))
 		return (false);//Message d'erreur dans check pipes
-	if (!check_redir(token_lst))//pas d'alloc ici
+	if (!check_redir(token_lst, shell))
 		return (false);//Message d'erreur dans check pipes
 	if (!create_cmds(shell, *token_lst))
 	{
-		ft_putstr_fd("ERROR CREATING CMDS\n", 2);//a mon avis on fera pas le message ici car il y a aussi le cas du path pas trouve
-		return (false);
+		shell->exit_code = 1;//car pb de malloc
+		return (false);//pas de message d'erreur ici...
 	}
 	return (true);
 }

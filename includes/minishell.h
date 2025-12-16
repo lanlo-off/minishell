@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 10:54:23 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:25:41 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <signal.h>
+#include <errno.h>
 // # include <editline/readline.h> // POUR MACOS
+
 extern int g_signal_received;
 
 /*=============== EXIT CODES =============== */
@@ -151,9 +153,9 @@ int		infinite_loop(t_shell *shell);
 
 /*redir.c*/
 bool	is_std_fd(int fd);
-int		open_outfile(char *file, t_token_type type);
+int		open_outfile(char *file, t_token_type type, t_cmd *cmd);
 bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
-int		open_infile(char *file);
+int		open_infile(char *file, t_cmd *cmd);
 bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
 
 /*single_cmd_utils.c*/
@@ -177,6 +179,10 @@ void	exit_fork(t_cmd *cmd, t_shell *shell);
 void	free_env(t_env *env);
 
 void heredoc_sigint_handler(int sig);
+
+/*print_error.c*/
+int	print_error(char *name, int err, t_err_type type, t_cmd *cmd);
+int	print_error_parser(char *token, t_shell *shell);
 
 /*=============== DEBUG A VIRER AVANT PUSH =============== */
 void	print_tokens_and_cmds(t_shell *shell);

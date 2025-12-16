@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 11:00:55 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:59:41 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,13 +87,14 @@ static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 	exit(EXIT_SUCCESS);
 }
 
-bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell) {
+bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
+{
 	int pipefd[2];
 	pid_t pid;
 	int status;
 
 	if (pipe(pipefd) == -1)
-		return (perror("pipe"), false);
+		return (print_error(NULL, errno, ERR_PIPE, cmd), false);
 	pid = fork();
 	if (pid == -1)
 		return (perror("fork"), close_fds_ptr(&pipefd[0], &pipefd[1]), false);//close(pipefd[0]), close(pipefd[1]), false);

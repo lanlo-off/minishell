@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/10 12:23:39 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 16:57:47 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,15 @@ typedef struct s_shell
 	int		exit_code;
 	char	**envp;
 }	t_shell;
+
+typedef enum e_err_type
+{
+	ERR_EXEC,
+	ERR_REDIR,
+	ERR_PIPE,
+	ERR_FORK,
+	ERR_CMD_NOT_FOUND,
+	ERR_BUILTIN
+}	t_err_type;
 
 #endif

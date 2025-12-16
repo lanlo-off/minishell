@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 10:43:27 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/01 16:29:33 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:06:39 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,11 @@ bool	lexer(t_shell *shell, char *line)
 	if (!split_token(shell, lexer.source, &lexer))
 		return (clean_lexer_struct(&lexer), false);
 	if (!check_quotes(&shell->token))
-		return (clean_lexer_struct(&lexer), false);//message erreur deja imprime avant
+	{
+		shell->exit_code = EXIT_SYNTAX_ERROR;
+		clean_lexer_struct(&lexer); 
+		return (false);//message erreur deja imprime avant
+	}
 	if (!split_subwords(&shell->token))//split les mots en subword
 		return (clean_lexer_struct(&lexer), false);
 	clean_lexer_struct(&lexer);

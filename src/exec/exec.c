@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 10:57:32 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:28:35 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	set_normal_fds(t_cmd *cmd, int pipefd[2])
 	{
 		if (pipe(pipefd) == -1)
 		{
-			perror("pipe");
+			print_error(NULL, errno, ERR_PIPE, cmd);
 			return (false);
 		}
 		if (cmd->prev) // si pas la premiere cmd
@@ -49,7 +49,8 @@ void	exec_cmd(t_cmd *cmd, char **envp, t_shell *shell)
 	}
 	// else if (cmd->fd_in >= 0 && cmd->fd_out >= 0)
 	execve(cmd->path, cmd->av, envp);
-	perror("execve");
+	print_error(cmd->path, errno, ERR_EXEC, cmd);
+	// perror("execve");
 	exit_fork(cmd, shell); // exit fork aussi car faut kill ce processus ??
 }
 
@@ -140,9 +141,8 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 			return (false);                             
 			// car faut pas faire les autres commandes quand on a fail le pipe ? Mais comment faire pour ne pas faire les premieres commandes dont le pipe n'a pas fail ?
 		if (!handle_redir_in(cmd, cmd->redirs_in, shell)
-			// Manage Heredoc ici et impression du message d'erreur si necessaire
-			|| !handle_redir_out(cmd, cmd->redirs_out) || !check_cmd(cmd)
-				|| !do_cmd(cmd, shell, pipefd))
+			|| !handle_redir_out(cmd, cmd->redirs_out)
+			|| !check_cmd(cmd) || !do_cmd(cmd, shell, pipefd))
 		{
 			cmd = cmd->next;
 			continue ;
