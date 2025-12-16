@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 19:29:10 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 11:07:25 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	clean_cmd(t_cmd *cmd)
 		clean_redir_cmd(cmd->redirs_out);
 	if (cmd->path_to_free)
 		free(cmd->path);
+	close_fds_ptr(&cmd->fd_in, &cmd->fd_out);//on peut le mettre d'office car c'est protege a priori
 }
 
 static void	clean_cmd_lst(t_cmd *cmd_lst)

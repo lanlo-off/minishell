@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:15:56 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 19:48:11 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:50:48 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,20 @@ void	close_fds(int fd_in, int fd_out)
 		close(fd_in);
 	if (fd_out >= 0 && !is_std_fd(fd_out))
 		close(fd_out);
+}
+
+void	close_fds_ptr(int *fd_in, int *fd_out)
+{
+	if (fd_in && *fd_in >= 0 && !is_std_fd(*fd_in))
+	{
+		close(*fd_in);
+		*fd_in = -1;
+	}
+	if (fd_out && *fd_out >= 0 && !is_std_fd(*fd_out))
+	{
+		close(*fd_out);
+		*fd_out = -1;
+	}
 }
 
 bool	is_builtin(t_cmd *cmd)

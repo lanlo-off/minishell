@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 19:47:45 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/16 10:54:23 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ bool	check_cmd(t_cmd *cmd);
 bool	is_builtin(t_cmd *cmd);
 int		exec_builtin(t_cmd *cmd, t_shell *shell);
 void	close_fds(int fd_in, int fd_out);
+void	close_fds_ptr(int *fd_in, int *fd_out);
 
 /*exec.c*/
 void	exec_cmd(t_cmd *cmd, char **envp, t_shell *shell);
