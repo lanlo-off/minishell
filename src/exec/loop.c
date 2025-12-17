@@ -6,13 +6,13 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 12:13:19 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:48:57 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	wait_children(t_cmd *cmd_lst)
+static int wait_children(t_cmd *cmd_lst)
 {
 	t_cmd *cmd;
 	int code;
@@ -26,7 +26,7 @@ static int	wait_children(t_cmd *cmd_lst)
 			waitpid(cmd->pid, &cmd->exit_status, 0);
 		cmd = cmd->next;
 	}
-	if (cmd->pid > 0)/* Si un enfant a été attendu, interpréter le status; sinon, renvoyer tel quel (builtin ou erreur avant fork) */
+	if (cmd->pid > 0) /* Si un enfant a été attendu, interpréter le status; sinon, renvoyer tel quel (builtin ou erreur avant fork) */
 		waitpid(cmd->pid, &cmd->exit_status, 0);
 	code = cmd->exit_status;
 	if (cmd->pid > 0)
@@ -47,18 +47,16 @@ int infinite_loop(t_shell *shell)
 	{
 		g_signal_received = 0;
 		shell->av = readline("AU SUIVANT> ");
+		if (g_signal_received)
+			shell->exit_code = 130;
 		if (!shell->av)
-		{
-			clean_exit(shell);
-			return (shell->exit_code);
-		}
-		// ft_putstr_fd(CYAN "========================================" RESET "\n", 1);
+			return (clean_exit(shell), shell->exit_code);
 		if (shell->av && *shell->av)
 			add_history(shell->av);
 		if (!lexer(shell, shell->av)) // si pb, on imprime erreur dans lexer
 		{
 			clean_post_lexer(shell); // on prepare la prochaine boucle en faisant free
-			continue;                // et passe a la boucle suivante
+			continue;				 // et passe a la boucle suivante
 		}
 		if (!parser(shell, &shell->token)) // on imprime l'erreur si besoin dans la fonction
 		{
@@ -67,16 +65,13 @@ int infinite_loop(t_shell *shell)
 		}
 		if (!execution(shell, shell->cmds))
 		{
-			shell->exit_code = wait_children(shell->cmds);//sinon shell recupere pas le code
-			clean_post_parser(shell); // inclut clean lexer dedans !
+			shell->exit_code = wait_children(shell->cmds); // sinon shell recupere pas le code
+			clean_post_parser(shell);					   // inclut clean lexer dedans !
 			continue;
 		}
 		if (shell->flag_exit)
-		{
-			clean_exit(shell);
-			return (shell->exit_code);
-		}
-		if (shell->cmds)//si on a envoye une liste vide on veut pas changer l'exit code
+			return (clean_exit(shell), shell->exit_code);
+		if (shell->cmds) // si on a envoye une liste vide on veut pas changer l'exit code
 			shell->exit_code = wait_children(shell->cmds);
 		// print_tokens_and_cmds(shell);
 		// printf("%s\n", shell->av);

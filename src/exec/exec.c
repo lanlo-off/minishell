@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 15:26:31 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 17:52:50 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,14 +60,14 @@ void	exec_cmd(t_cmd *cmd, char **envp, t_shell *shell)
 
 bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 {
+	g_signal_received = 2;
 	cmd->pid = fork();
 	if (cmd->pid == -1)
 		return (print_error(NULL, errno, ERR_FORK, cmd), false);
 	else if (cmd->pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
-		// close_fds(pipefd[0], pipefd[1]);
-		// close_fds(cmd->fd_in, cmd->fd_out);
 		close_fds_ptr(&pipefd[0], &pipefd[1]);
 		close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
 		exec_cmd(cmd, shell->envp, shell);
@@ -83,7 +83,6 @@ bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 			close_fds_ptr(&cmd->fd_in, NULL);//close(cmd->fd_in);
 		if (cmd->next)               // si on n'est pas a la derniere commande
 			cmd->fd_out = pipefd[0];
-				// on ecrit dans le pipe pour envoyer a la prochaine commande
 		return (true);
 	}
 	return (true);

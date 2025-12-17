@@ -110,8 +110,11 @@ int ft_export(t_cmd *cmd, t_shell *shell)
   i = 1;
   while (cmd->av[i])
   {
+	if (!ft_strchr(cmd->av[i], '='))
+		goto incr;
     if (!export_var(shell, cmd->av[i]))
       ft_putstr_fd("export: not valid value\n", 2);
+incr :
     i++;
   }
   return (EXIT_SUCCESS);

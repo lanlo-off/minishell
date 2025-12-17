@@ -6,16 +6,11 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:39:38 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 22:27:31 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 18:06:07 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// void	init_signals(shell)
-// {
-
-// }
 
 void	init_structs(t_shell *shell, char **envp)
 {

@@ -8,8 +8,9 @@ void handle_sigint(int sig)
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
-	if(g_signal_received == 0)
+	if (g_signal_received == 0 || g_signal_received == 1)
 		rl_redisplay();
+	g_signal_received = 1;
 }
 
 void init_signals(void)
@@ -19,6 +20,13 @@ void init_signals(void)
 }
 
 void heredoc_sigint_handler(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	g_signal_received = 67;
+}
+
+void	main_loop_sigint(int sig)
 {
 	(void)sig;
 	write(1, "\n", 1);

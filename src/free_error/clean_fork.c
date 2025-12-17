@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/11 21:58:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 10:53:51 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 16:51:05 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ void	exit_fork(t_cmd *cmd, t_shell *shell)
 	// close_fds(cmd->fd_in, cmd->fd_out);
 	close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
 	clean_post_parser(shell);
+	clean_shell(shell);
 	exit(code);
 }
