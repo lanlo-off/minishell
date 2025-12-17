@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 09:50:29 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:29:42 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int infinite_loop(t_shell *shell)
 		shell->av = readline("AU SUIVANT> ");
 		if (!shell->av)
 		{
-			ft_putendl_fd("exit", 1);
 			clean_exit(shell);
 			return (shell->exit_code);
 		}
@@ -79,8 +78,8 @@ int infinite_loop(t_shell *shell)
 		}
 		if (shell->cmds)//si on a envoye une liste vide on veut pas changer l'exit code
 			shell->exit_code = wait_children(shell->cmds);
-		// printf("%s\n", shell->av);
 		// print_tokens_and_cmds(shell);
+		// printf("%s\n", shell->av);
 		prepare_next_loop(shell);
 	}
 	return (shell->exit_code);

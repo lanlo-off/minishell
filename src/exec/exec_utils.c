@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 19:15:56 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 10:10:16 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 10:33:26 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	close_fds_ptr(int *fd_in, int *fd_out)
 
 bool	is_builtin(t_cmd *cmd)
 {
-	if (!cmd || !cmd->av || cmd->av[0])
+	if (!cmd || !cmd->av || !cmd->av[0])
 		return (false);
 	if (ft_strncmp(cmd->av[0], "pwd", 4) == 0)
 		return (true);

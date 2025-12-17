@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 14:21:37 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/15 10:54:00 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 10:48:56 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	clean_shell(t_shell *shell)
 
 void	clean_exit(t_shell *shell)
 {
+	ft_putstr_fd("exit\n", 1);
 	clean_post_parser(shell);
 	//shell->exit_code = 1;
 }

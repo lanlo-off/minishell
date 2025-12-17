@@ -21,11 +21,13 @@ int ft_echo(char **args)
 
   i = 1;
   print_newline = true;
-  while (args[i] && flag_nl(args[i])) {
+  while (args[i] && flag_nl(args[i]))
+  {
     print_newline = false;
     i++;
   }
-  while (args[i]) {
+  while (args[i])
+  {
     ft_putstr_fd(args[i], 1);
     if (args[i + 1])
       ft_putstr_fd(" ", 1);
