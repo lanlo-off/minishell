@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 18:38:54 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 19:05:41 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,16 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	return (res);
 }
 
+//  static int	rl_sigint_hook(void)
+//  {
+// 	if (g_signal_received == 67)
+// 	{
+// 		rl_replace_line("", 0);
+// 		rl_done = 1;
+// 	}
+// 	return (0);
+//  }
+
 /**
  * @brief Create a heredoc pipe (permet de gerer jusqu'a 1MB de char donc
  * suffisant, pas besoin de creer un doc ?!) Ecris ce qui arrive du here_doc
@@ -56,17 +66,6 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
  * @return true
  * @return false
  */
-
- static int	rl_sigint_hook(void)
- {
-	if (g_signal_received == 67)
-	{
-		rl_replace_line("", 0);
-		rl_done = 1;
-	}
-	return (0);
- }
-
 static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 {
 	char *line;
@@ -74,11 +73,8 @@ static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 
 	signal(SIGINT, heredoc_sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
-	rl_event_hook = rl_sigint_hook;
 	while (true)
 	{
-		if (g_signal_received == 67)
-			break;
 		line = readline(">");
 		if (!line)
 		{
@@ -98,16 +94,14 @@ static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 		free(exp_line);
 	}
 	close_fds_ptr(&pipe_write_end, NULL);//close(pipe_write_end);
-	clean_post_parser(shell);
-	clean_shell(shell);
-	exit(g_signal_received != 67);
+	exit(EXIT_SUCCESS);
 }
 
 bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 {
 	int pipefd[2];
 	pid_t pid;
-	int status = 0;
+	int status;
 
 	if (pipe(pipefd) == -1)
 		return (print_error(NULL, errno, ERR_PIPE, cmd), false);
@@ -116,7 +110,6 @@ bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 		return (print_error(NULL, errno, ERR_FORK, cmd), close_fds_ptr(&pipefd[0], &pipefd[1]), false);//close(pipefd[0]), close(pipefd[1]), false);
 	if (pid == 0)
 	{
-		init_signals();
 		close_fds_ptr(&pipefd[0], NULL);//close(pipefd[0]);
 		heredoc_loop(pipefd[1], redir, shell);
 	}
