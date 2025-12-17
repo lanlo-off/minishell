@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 21:38:38 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 12:12:16 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,12 +42,13 @@ static bool	set_normal_fds(t_cmd *cmd, int pipefd[2])
 
 void	exec_cmd(t_cmd *cmd, char **envp, t_shell *shell)
 {
+	if (!cmd->av || !cmd->av[0] || !cmd->av[0][0])//rien du tout dans les commandes je sors, sinon j'avance car il peut y avoir des trucs dans av[1]
+		exit_fork(cmd, shell);
 	if (is_builtin(cmd))
 	{
 		cmd->exit_status = exec_builtin(cmd, shell);
 		exit_fork(cmd, shell); // on free tout + close fd_in et out ? puis fait un exit dedans pour kill l'enfant
 	}
-	// else if (cmd->fd_in >= 0 && cmd->fd_out >= 0)
 	execve(cmd->path, cmd->av, envp);
 	print_error(cmd->path, errno, ERR_EXEC, cmd);
 	// perror("execve");

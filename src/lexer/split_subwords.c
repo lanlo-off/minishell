@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 16:01:34 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 11:31:39 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 11:56:21 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static bool	create_empty_sub(t_sub_type type, t_token *token)
 {
 	t_subword *new_sub;
 	
-	if (type == DEFAULT)
+	if (type == SUB_UNQUOTED)
 		return (true);
 	new_sub = ft_calloc(1, sizeof(t_subword));
 	if (!new_sub)
