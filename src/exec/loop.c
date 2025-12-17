@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/24 15:05:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 22:29:01 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 09:50:29 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int infinite_loop(t_shell *shell)
 			clean_exit(shell);
 			return (shell->exit_code);
 		}
-		shell->exit_code = wait_children(shell->cmds);
+		if (shell->cmds)//si on a envoye une liste vide on veut pas changer l'exit code
+			shell->exit_code = wait_children(shell->cmds);
 		// printf("%s\n", shell->av);
 		// print_tokens_and_cmds(shell);
 		prepare_next_loop(shell);

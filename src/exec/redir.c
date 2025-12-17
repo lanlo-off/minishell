@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:14:26 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 22:32:21 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 10:07:59 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell)
 {
 	t_redir	*redir;
 
-	if (!redir_lst)
+	if (!cmd || !redir_lst)
 		return (true);
 	redir = redir_lst;
 	while (redir)
