@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 22:14:33 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:13:22 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	clean_cmd(t_cmd *cmd);
 void	clean_post_parser(t_shell *shell);
 
 /*expand_utils.c*/
+bool	has_quoted_subword(t_subword *sub);
 void	get_next_useful_token(t_token **token, t_token_type type);
 char	*expand_var(char *str, int *i, t_shell *shell);
 char	*get_expanded_var(char *var, t_env **env, t_shell *shell);

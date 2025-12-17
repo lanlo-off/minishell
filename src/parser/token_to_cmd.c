@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 13:34:09 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/10 12:27:59 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:12:34 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,22 +88,26 @@ static bool	handle_word_token(t_token *token, t_cmd *cmd, t_shell *shell)
 	int		size;
 	char	**new_av;
 	int		i;
+	char	*expanded;
 
 	size = 0;
 	i = 0;
 	while (cmd->av && cmd->av[size])
 		size++;
+	expanded = concat_expand_token(token->subword, shell);
+	if ((!expanded || !expanded[0]) && !has_quoted_subword(token->subword))
+		return (free(expanded), true);//on n'ajoute pas mais pas d'erreur
 	new_av = ft_calloc(size + 2, sizeof(char *));
 	if (!new_av)
-		return (false);
+		return (free(expanded), false);
 	while (i < size)
 	{
 		new_av[i] = cmd->av[i];
 		i++;
 	}
-	new_av[size] = concat_expand_token(token->subword, shell);
-	if (!new_av[size])//attention car il peut etre NULL alors que ca fonctionne si le token est vide ?
-		return (false);
+	new_av[size] = expanded;
+	// if (!new_av[size])
+	// 	return (false);
 	if (cmd->av)
 		free(cmd->av);
 	cmd->av = new_av;

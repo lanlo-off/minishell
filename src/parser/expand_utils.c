@@ -6,11 +6,27 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 11:29:36 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/05 15:56:36 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/17 15:05:43 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+bool	has_quoted_subword(t_subword *sub)
+{
+	t_subword	*tmp;
+	
+	if (!sub)
+		return (false);
+	tmp = sub;
+	while (tmp)
+	{
+		if (tmp->type == SUB_SQUOTED || tmp->type == SUB_DQUOTED)
+			return (true);
+		tmp = tmp->next;
+	}
+	return (false);
+}
 
 void	get_next_useful_token(t_token **token, t_token_type type)
 {
