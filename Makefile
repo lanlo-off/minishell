@@ -30,8 +30,7 @@ SRCS += src/init/init.c\
 	src/init/get_path.c\
 	src/init/signals.c
 
-SRCS += src/lexer/lexer_utils.c\
-	src/lexer/lexer.c\
+SRCS += src/lexer/lexer.c\
 	src/lexer/operators.c\
 	src/lexer/quotes.c\
 	src/lexer/split_sub_utils.c\

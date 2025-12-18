@@ -24,10 +24,10 @@ static char	*concat_expand_token(t_subword *subword, t_shell *shell)
 	while (sub)
 	{
 		tmp = res;
-		exp = expanded(sub->val, sub->type, shell);//si on alloc dans expanded
+		exp = expanded(sub->val, sub->type, shell);
 		if (!exp)
 			return (NULL);
-		if (!res)//pour le premier passage
+		if (!res)
 			res = ft_strdup(exp);
 		else
 			res = ft_strjoin(tmp, exp);
@@ -42,16 +42,16 @@ static bool	handle_redir_in_token(t_token *token, t_cmd *cmd, t_shell *shell)
 {
 	t_redir	*new_redir;
 	t_redir	*tmp;
-	
+
 	new_redir = ft_calloc(1, sizeof(t_redir));
 	if (!new_redir)
 		return (false);
 	new_redir->type = token->type;
-	new_redir->file_quote_type = get_file_quote_type(token->next->subword);//necessaire pour savoir s'il faut expand le contenu du heredoc ou pas
-	new_redir->file = concat_expand_token(token->next->subword, shell);//il faut recuperer le nom du fichier (et pour ca il faut concatener tous les subwords apres les avoir expand)
-	if (!cmd->redirs_in)//s'il n'y a pas encore de redirections on dit que le new est le premier
+	new_redir->file_quote_type = get_file_quote_type(token->next->subword);
+	new_redir->file = concat_expand_token(token->next->subword, shell);
+	if (!cmd->redirs_in)
 		cmd->redirs_in = new_redir;
-	else//sinon on rajoute cette redirection a la fin de la liste chainee des redirs
+	else
 	{
 		tmp = cmd->redirs_in;
 		while (tmp->next)
@@ -65,15 +65,15 @@ static bool	handle_redir_out_token(t_token *token, t_cmd *cmd, t_shell *shell)
 {
 	t_redir	*new_redir;
 	t_redir	*tmp;
-	
+
 	new_redir = ft_calloc(1, sizeof(t_redir));
 	if (!new_redir)
 		return (false);
 	new_redir->type = token->type;
-	new_redir->file = concat_expand_token(token->next->subword, shell);//il faut recuperer le nom du fichier (et pour ca il faut concatener tous les subwords apres les avoir expand)
-	if (!cmd->redirs_out)//s'il n'y a pas encore de redirections on dit que le new est le premier
+	new_redir->file = concat_expand_token(token->next->subword, shell);
+	if (!cmd->redirs_out)
 		cmd->redirs_out = new_redir;
-	else//sinon on rajoute cette redirection a la fin de la liste chainee des redirs
+	else
 	{
 		tmp = cmd->redirs_out;
 		while (tmp->next)
@@ -96,7 +96,7 @@ static bool	handle_word_token(t_token *token, t_cmd *cmd, t_shell *shell)
 		size++;
 	expanded = concat_expand_token(token->subword, shell);
 	if ((!expanded || !expanded[0]) && !has_quoted_subword(token->subword))
-		return (free(expanded), true);//on n'ajoute pas mais pas d'erreur
+		return (free(expanded), true);
 	new_av = ft_calloc(size + 2, sizeof(char *));
 	if (!new_av)
 		return (free(expanded), false);
@@ -106,8 +106,6 @@ static bool	handle_word_token(t_token *token, t_cmd *cmd, t_shell *shell)
 		i++;
 	}
 	new_av[size] = expanded;
-	// if (!new_av[size])
-	// 	return (false);
 	if (cmd->av)
 		free(cmd->av);
 	cmd->av = new_av;
@@ -119,7 +117,7 @@ bool	manage_word_and_redir(t_token *token, t_cmd *cmd, t_shell *shell)
 	if (token->type == WORD)
 		return (handle_word_token(token, cmd, shell));
 	else if (token->type == REDIR_IN || token->type == HEREDOC)
-		return (handle_redir_in_token(token, cmd, shell));//attention car on traite 2 tokens (le token redir et le token suivant qui donne le file)
-	else //sous entendu on est dans les redir out
-		return (handle_redir_out_token(token, cmd, shell));//attention car on traite 2 tokens (le token redir et le token suivant qui donne le file)
+		return (handle_redir_in_token(token, cmd, shell));
+	else
+		return (handle_redir_out_token(token, cmd, shell));
 }

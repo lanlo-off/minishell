@@ -1,31 +1,21 @@
 #include "../../../includes/minishell.h"
-/**
- * @brief si que exit exit avec code 0 OK
- * si exit + num, exit avec code = num
- * si exit + str + autres -> exit avec code 2 (moi j'ai 255)
- * si exit + num + autres (num/str) -> pas d'exit OK
- *
- * @param cmd
- * @param shell
- * @return true
- * @return false
- */
-static int is_numeric(char *str)
-{
-    int i;
 
-    i = 0;
-    if (str[i] == '+' || str[i] == '-')
-        i++;
-    if (!str[i])
-        return (0);
-    while (str[i])
-    {
-        if (!ft_isdigit(str[i]))
-            return (0);
-        i++;
-    }
-    return (1);
+static int	is_numeric(char *str)
+{
+	int	i;
+
+	i = 0;
+	if (str[i] == '+' || str[i] == '-')
+		i++;
+	if (!str[i])
+		return (0);
+	while (str[i])
+	{
+		if (!ft_isdigit(str[i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }
 
 void	print_error_exit(int type, char *arg)
@@ -42,30 +32,30 @@ void	print_error_exit(int type, char *arg)
 		ft_putendl_fd("too many arguments", 2);
 }
 
-int ft_exit(t_cmd *cmd, t_shell *shell)
+int	ft_exit(t_cmd *cmd, t_shell *shell)
 {
-    int lenArgs;
+	int	len_args;
 
-    lenArgs = check_args(cmd->av, 2);
-    if (lenArgs == 1)
-    {
-        shell->flag_exit = true;
-        return (0);
-    }
-    if (lenArgs == 2 && is_numeric(cmd->av[1]))
-    {
-        shell->flag_exit = true;
-        shell->exit_code = (unsigned int)ft_atoi(cmd->av[1]);
-        return (0);
-    }
-    if (!is_numeric(cmd->av[1]))
-    {
-        shell->flag_exit = true;
+	len_args = check_args(cmd->av, 2);
+	if (len_args == 1)
+	{
+		shell->flag_exit = true;
+		return (0);
+	}
+	if (len_args == 2 && is_numeric(cmd->av[1]))
+	{
+		shell->flag_exit = true;
+		shell->exit_code = (unsigned int)ft_atoi(cmd->av[1]);
+		return (0);
+	}
+	if (!is_numeric(cmd->av[1]))
+	{
+		shell->flag_exit = true;
 		print_error_exit(1, cmd->av[1]);
-        shell->exit_code = 255;
-        return (0);
-    }
-    if (is_numeric(cmd->av[1]) && cmd->av[2])
-        return (print_error_exit(2, NULL), 1);
-    return (0);
+		shell->exit_code = 255;
+		return (0);
+	}
+	if (is_numeric(cmd->av[1]) && cmd->av[2])
+		return (print_error_exit(2, NULL), 1);
+	return (0);
 }

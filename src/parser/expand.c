@@ -39,7 +39,7 @@ char	*expanded(char *str, t_sub_type type, t_shell *shell)
 	int		i;
 	char	*res;
 	char	*chunk;
-	
+
 	if (type == SUB_SQUOTED)
 		return (ft_strdup(str));
 	i = 0;
@@ -48,8 +48,8 @@ char	*expanded(char *str, t_sub_type type, t_shell *shell)
 	{
 		res = append_until_doll(str, &i, res);
 		if (!str[i])
-			break ;//on est a la fin de la string on n'a pas rencontre de dollar
-		i++;//sinon on skip le $
+			break ;
+		i++;
 		chunk = expand_var(str, &i, shell);
 		res = join_and_free(res, chunk);
 	}

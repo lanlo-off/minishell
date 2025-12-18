@@ -17,7 +17,6 @@ void	exit_fork(t_cmd *cmd, t_shell *shell)
 	int	code;
 
 	code = cmd->exit_status;
-	// close_fds(cmd->fd_in, cmd->fd_out);
 	close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
 	clean_post_parser(shell);
 	clean_shell(shell);

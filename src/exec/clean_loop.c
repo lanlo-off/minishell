@@ -15,6 +15,4 @@
 void	prepare_next_loop(t_shell *shell)
 {
 	clean_post_parser(shell);
-	//clean exec
-	
 }

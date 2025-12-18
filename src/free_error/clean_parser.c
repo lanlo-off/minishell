@@ -36,7 +36,7 @@ static void	clean_args_cmd(char **av)
 	i = 0;
 	if (!av)
 		return ;
-	while (av[i])//car le dernier av est NULL
+	while (av[i])
 	{
 		free(av[i]);
 		i++;
@@ -48,7 +48,7 @@ static void	clean_args_cmd(char **av)
 void	clean_cmd(t_cmd *cmd)
 {
 	if (!cmd)
-		return ; 
+		return ;
 	if (cmd->av)
 		clean_args_cmd(cmd->av);
 	if (cmd->redirs_in)
@@ -57,7 +57,7 @@ void	clean_cmd(t_cmd *cmd)
 		clean_redir_cmd(cmd->redirs_out);
 	if (cmd->path_to_free)
 		free(cmd->path);
-	close_fds_ptr(&cmd->fd_in, &cmd->fd_out);//on peut le mettre d'office car c'est protege a priori
+	close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
 }
 
 static void	clean_cmd_lst(t_cmd *cmd_lst)

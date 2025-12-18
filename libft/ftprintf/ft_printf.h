@@ -16,8 +16,8 @@
 # include <stdarg.h>
 # include <unistd.h>
 
-int ft_printf(const char *format, ...);
-int dispatcher(char spec, va_list *args);
+int	ft_printf(const char *format, ...);
+int	dispatcher(char spec, va_list *args);
 
 int	print_char(char c);
 int	print_string(char *s);

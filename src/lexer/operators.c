@@ -15,7 +15,7 @@
 bool	is_operator(char c)
 {
 	bool	val;
-	
+
 	val = false;
 	if (c == '|' || c == '>' || c == '<')
 		val = true;
@@ -26,11 +26,10 @@ bool	handle_operator(t_lexer *lexer, char *line, t_token **token_lst)
 {
 	t_token_type	type;
 
-	
 	if (!append_to_buffer(lexer, line[lexer->pos]))
 		return (false);
-	if ((line[lexer->pos] == '>' || line[lexer->pos] == '<') 
-		&& line[lexer->pos + 1] == line[lexer->pos])
+	if ((line[lexer->pos] == '>' || line[lexer->pos] == '<') && line[lexer->pos
+			+ 1] == line[lexer->pos])
 	{
 		if (!append_to_buffer(lexer, line[lexer->pos]))
 			return (false);

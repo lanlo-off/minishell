@@ -15,7 +15,7 @@
 static void	append_subword(t_subword *new, t_subword **list)
 {
 	t_subword	*tmp;
-	
+
 	if (!list || !*list)
 	{
 		*list = new;
@@ -30,8 +30,8 @@ static void	append_subword(t_subword *new, t_subword **list)
 
 static bool	create_empty_sub(t_sub_type type, t_token *token)
 {
-	t_subword *new_sub;
-	
+	t_subword	*new_sub;
+
 	if (type == SUB_UNQUOTED)
 		return (true);
 	new_sub = ft_calloc(1, sizeof(t_subword));
@@ -79,7 +79,7 @@ bool	create_sub(t_token *token, int end, int *length, t_sub_type type)
 static bool	split_subs(char *str, t_token *token)
 {
 	t_sub_manager	man;
-	
+
 	if (!str || !token)
 		return (true);
 	set_sub_manager(&man, str, token);
@@ -102,7 +102,7 @@ static bool	split_subs(char *str, t_token *token)
 		}
 		man.pos++;
 	}
-	return (create_sub(token, man.pos, &man.sub_len, SUB_UNQUOTED));//gerer le dernier mot si jamais il se finit pas par des quotes (sinon c'est gere dans la boucle)
+	return (create_sub(token, man.pos, &man.sub_len, SUB_UNQUOTED));
 }
 
 bool	split_subwords(t_token **token_list)

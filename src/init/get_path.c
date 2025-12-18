@@ -32,7 +32,7 @@ char	**split_path(t_env *env)
 	return (NULL);
 }
 
-char	*get_path(char *cmd, t_env	*env)
+char	*get_path(char *cmd, t_env *env)
 {
 	int		i;
 	char	**all_path;

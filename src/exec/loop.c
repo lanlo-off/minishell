@@ -12,10 +12,10 @@
 
 #include "../../includes/minishell.h"
 
-static int wait_children(t_cmd *cmd_lst)
+static int	wait_children(t_cmd *cmd_lst)
 {
-	t_cmd *cmd;
-	int code;
+	t_cmd	*cmd;
+	int		code;
 
 	if (!cmd_lst)
 		return (0);
@@ -41,7 +41,28 @@ static int wait_children(t_cmd *cmd_lst)
 	return (code);
 }
 
-int infinite_loop(t_shell *shell)
+static bool	check_loop(t_shell *shell)
+{
+	if (!lexer(shell, shell->av))
+	{
+		clean_post_lexer(shell);
+		return (false);
+	}
+	if (!parser(shell, &shell->token))
+	{
+		clean_post_parser(shell);
+		return (false);
+	}
+	if (!execution(shell, shell->cmds))
+	{
+		shell->exit_code = wait_children(shell->cmds);
+		clean_post_parser(shell);
+		return (false);
+	}
+	return (true);
+}
+
+int	infinite_loop(t_shell *shell)
 {
 	while (1)
 	{
@@ -53,25 +74,11 @@ int infinite_loop(t_shell *shell)
 			return (clean_exit(shell), shell->exit_code);
 		if (shell->av && *shell->av)
 			add_history(shell->av);
-		if (!lexer(shell, shell->av))
-		{
-			clean_post_lexer(shell);
-			continue;
-		}
-		if (!parser(shell, &shell->token))
-		{
-			clean_post_parser(shell);
-			continue;
-		}
-		if (!execution(shell, shell->cmds))
-		{
-			shell->exit_code = wait_children(shell->cmds);
-			clean_post_parser(shell);
-			continue;
-		}
+		if (!check_loop(shell))
+			continue ;
 		if (shell->flag_exit)
 			return (clean_exit(shell), shell->exit_code);
-		if (shell->cmds) // si on a envoye une liste vide on veut pas changer l'exit code et il y a pas d'enfants a attendre
+		if (shell->cmds)
 			shell->exit_code = wait_children(shell->cmds);
 		prepare_next_loop(shell);
 	}

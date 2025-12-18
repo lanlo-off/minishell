@@ -18,19 +18,19 @@ int	ft_printf(const char *format, ...)
 	int		count;
 	int		i;
 
-  i = 0;
-  count = 0;
-  va_start(args, format);
-  while (format[i])
-  {
-    if (format[i] == '%' && format[i + 1])
-    {
-      count += dispatcher(format[i + 1], &args);
-      i += 2;
-	  }
-	  else
-      count += write(1, &format[i++], 1);
-  }
-  va_end(args);
-  return (count);
+	i = 0;
+	count = 0;
+	va_start(args, format);
+	while (format[i])
+	{
+		if (format[i] == '%' && format[i + 1])
+		{
+			count += dispatcher(format[i + 1], &args);
+			i += 2;
+		}
+		else
+			count += write(1, &format[i++], 1);
+	}
+	va_end(args);
+	return (count);
 }

@@ -15,7 +15,7 @@
 bool	has_quoted_subword(t_subword *sub)
 {
 	t_subword	*tmp;
-	
+
 	if (!sub)
 		return (false);
 	tmp = sub;
@@ -30,40 +30,40 @@ bool	has_quoted_subword(t_subword *sub)
 
 void	get_next_useful_token(t_token **token, t_token_type type)
 {
-	*token = (*token)->next;//on avance car on vient de traiter le token envoye
-	if (type != WORD && type != PIPE)//si c'etait une redir avant on est sur qu'il y aura un token apres
-		*token = (*token)->next;//on skip le token WORD = file du redir car deja traite avec le redir
+	*token = (*token)->next;
+	if (type != WORD && type != PIPE)
+		*token = (*token)->next;
 }
 
 char	*get_expanded_var(char *var, t_env **env, t_shell *shell)
 {
 	t_env	*tmp;
 
-	if (!env || !*env || !var)//si rien a trouver on renvoie vide
+	if (!env || !*env || !var)
 		return (ft_strdup(""));
-	if (!ft_strcmp(var, "$") || !ft_strcmp(var, "#"))//cas particuliers qu'on veut ignorer
+	if (!ft_strcmp(var, "$") || !ft_strcmp(var, "#"))
 		return (ft_strdup(""));
-	if (!ft_strcmp(var, "?"))//cas particulier dernier exit code (var contient "?" pas "$?")
-		return (ft_itoa(shell->exit_code));//A bien garder entre chaque boucle voir comment gerer si on commence par faire $? dans minishell
+	if (!ft_strcmp(var, "?"))
+		return (ft_itoa(shell->exit_code));
 	tmp = *env;
 	while (tmp)
 	{
-		if (!ft_strcmp(var, tmp->key))//si on trouve bien la key
+		if (!ft_strcmp(var, tmp->key))
 		{
-			if (tmp->value)//s'il y a une value associee
+			if (tmp->value)
 				return (ft_strdup(tmp->value));
 			return (ft_strdup(""));
 		}
-		tmp=tmp->next;
+		tmp = tmp->next;
 	}
-	return (ft_strdup(""));//variable pas trouvee
+	return (ft_strdup(""));
 }
 
 /**
  * @brief Get the var end pos index
  * Start on the char after $ not on the $
- * 
- * @param str 
+ *
+ * @param str
  * @param start first char after $ (not $)
  * @return int index of the last char of the var
  */
@@ -72,16 +72,16 @@ static int	get_var_end_pos(char *str, int start)
 	int	end;
 
 	end = start;
-	if (!str[end])//pas de caracteres apres le $
+	if (!str[end])
 		return (end - 1);
-	if (str[end] == '?' || ft_isdigit(str[end]) || str[end] == '$')//si ? c'est la variable particuliere, si numerique ca consomme le premier nombre
+	if (str[end] == '?' || ft_isdigit(str[end]) || str[end] == '$')
 		return (end);
-	if (!ft_isalpha(str[end]) && str[end] != '_')//dans ce cas on ne consomme que le $ (car le cas du $0-9 est deja gere au dessus)
+	if (!ft_isalpha(str[end]) && str[end] != '_')
 		return (end - 1);
-	end++;//premier caractere est forcement alphabetique ou _
-	while (str[end] && (ft_isalnum(str[end]) || str[end] == '_'))//les suivants sont alphanum ou _
+	end++;
+	while (str[end] && (ft_isalnum(str[end]) || str[end] == '_'))
 		end++;
-	return (end - 1);//si le premier caractere est invalide, on renvoie donc l'index de ce dernier comme fin de variable, fonctionne aussi pour $?
+	return (end - 1);
 }
 
 char	*expand_var(char *str, int *i, t_shell *shell)
@@ -94,10 +94,10 @@ char	*expand_var(char *str, int *i, t_shell *shell)
 	start = *i;
 	end = get_var_end_pos(str, start);
 	if (end < start)
-		return (ft_strdup("$"));//Pourquoi j'ai mis ca deja ??
+		return (ft_strdup("$"));
 	varname = ft_strndup(str + start, end - start + 1);
 	value = get_expanded_var(varname, &shell->env, shell);
 	free(varname);
-	*i = end + 1;//on avance l'index pour pas reboucler sur les caracteres de la variable dans la copie until litteral
+	*i = end + 1;
 	return (value);
 }

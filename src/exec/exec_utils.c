@@ -12,14 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-/**
- * @brief Pour verifier si on l'envoie a execve et sinon imprimer le message
- * d'erreur
- *
- * @param cmd
- * @return true
- * @return false
- */
 bool	check_cmd(t_cmd *cmd)
 {
 	if (!cmd->av || !cmd->av[0])

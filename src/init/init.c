@@ -30,15 +30,15 @@ bool	fill_cmd(t_cmd *cmd, t_shell *shell)
 	cmd->exit_status = 0;
 	if (cmd->av && cmd->av[0])
 	{
-	if (is_builtin(cmd))
-		cmd->path = cmd->av[0];
-	else if (!ft_strchr(cmd->av[0], '/'))//si on ne trouve pas de / dans le nom de la commande -> on n'est pas en chemin absolu
-	{
-		cmd->path = get_path(cmd->av[0], shell->env);
-		cmd->path_to_free = true;
-	}
-	else//si on nous a donne le chemin absolu (a verifier car peut etre que ca fonctionne pas si la personne envoie ../../(jusqu'a arriver au home)/user/bin/cat)
-		cmd->path = cmd->av[0];
+		if (is_builtin(cmd))
+			cmd->path = cmd->av[0];
+		else if (!ft_strchr(cmd->av[0], '/'))
+		{
+			cmd->path = get_path(cmd->av[0], shell->env);
+			cmd->path_to_free = true;
+		}
+		else
+			cmd->path = cmd->av[0];
 	}
 	cmd->fd_in = -1;
 	cmd->fd_out = -1;

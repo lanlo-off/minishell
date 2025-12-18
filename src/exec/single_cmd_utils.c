@@ -28,7 +28,7 @@ bool	fork_single_cmd(t_cmd *cmd, t_shell *shell)
 	g_signal_received = 2;
 	cmd->pid = fork();
 	if (cmd->pid == -1)
-		return (print_error(NULL, errno, ERR_FORK, cmd), false); // exit_bad_fork(cmd), quel comportement ? Fin de la commande et on continue ? Fin de la chaine de cmd ?
+		return (print_error(NULL, errno, ERR_FORK, cmd), false);
 	else if (cmd->pid == 0)
 	{
 		signal(SIGQUIT, SIG_DFL);
@@ -36,29 +36,19 @@ bool	fork_single_cmd(t_cmd *cmd, t_shell *shell)
 		close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
 		if (check_cmd(cmd))
 			exec_cmd(cmd, shell->envp, shell);
-		exit_fork(cmd, shell);// car check_cmd ou execve a fail
+		exit_fork(cmd, shell);
 		return (false);
 	}
 	else
 	{
 		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))
-			close_fds_ptr(&cmd->fd_out, NULL);//close(cmd->fd_out);
+			close_fds_ptr(&cmd->fd_out, NULL);
 		if (cmd->fd_in >= 0 && !is_std_fd(cmd->fd_in))
-			close_fds_ptr(&cmd->fd_in, NULL);//close(cmd->fd_in);
+			close_fds_ptr(&cmd->fd_in, NULL);
 		return (true);
 	}
 }
 
-/**
- * @brief Afin de faire un unique builtin il faut
- * stocker les STD(dup), puis dup2, puis executer,
- * puis restaurer(dup2), puis fermer
- * 
- * @param cmd 
- * @param saved_stdin 
- * @param saved_stdout 
- * @param shell 
- */
 void	single_builtin(t_cmd *cmd, int saved_in, int saved_out, t_shell *shell)
 {
 	saved_in = dup(STDIN_FILENO);
@@ -70,11 +60,9 @@ void	single_builtin(t_cmd *cmd, int saved_in, int saved_out, t_shell *shell)
 	cmd->exit_status = exec_builtin(cmd, shell);
 	dup2(saved_in, STDIN_FILENO);
 	dup2(saved_out, STDOUT_FILENO);
-	// close(saved_in);
-	// close(saved_out);
 	close_fds_ptr(&saved_in, &saved_out);
 	if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
-		close_fds_ptr(&cmd->fd_in, NULL);//close(cmd->fd_in);
+		close_fds_ptr(&cmd->fd_in, NULL);
 	if (cmd->fd_out >= 0 && cmd->fd_out != STDOUT_FILENO)
-		close_fds_ptr(&cmd->fd_out, NULL);//close(cmd->fd_out);
+		close_fds_ptr(&cmd->fd_out, NULL);
 }

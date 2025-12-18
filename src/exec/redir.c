@@ -29,7 +29,7 @@ int	open_outfile(char *file, t_token_type type, t_cmd *cmd)
 
 	fd = -1;
 	if (type == REDIR_OUT)
-		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);//normalement ca ouvre 0666 7 umask mais umask c'est quasi tout le temps 0022
+		fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
 		fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
@@ -46,8 +46,8 @@ bool	handle_redir_out(t_cmd *cmd, t_redir *redir_lst)
 	redir = redir_lst;
 	while (redir)
 	{
-		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))//si on a deja un fd ouvert mais qu'on va faire une redir, on peut le fermer il sert a rien
-			close_fds_ptr(&cmd->fd_out, NULL);//close(cmd->fd_out);
+		if (cmd->fd_out >= 0 && !is_std_fd(cmd->fd_out))
+			close_fds_ptr(&cmd->fd_out, NULL);
 		cmd->fd_out = open_outfile(redir->file, redir->type, cmd);
 		if (cmd->fd_out < 0)
 			return (false);
@@ -76,11 +76,11 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell)
 	redir = redir_lst;
 	while (redir)
 	{
-		if (cmd->fd_in >= 0 && !is_std_fd(cmd->fd_in))//si on a deja un fd ouvert mais qu'on va faire une redir, on peut le fermer il sert a rien
-			close_fds_ptr(&cmd->fd_in, NULL);//close(cmd->fd_in);
-		if (redir->type == HEREDOC && !create_heredoc(cmd, redir, shell))//on change le cmd->fd_in dans la fonction si erreur heredoc on l'ecrit ici
+		if (cmd->fd_in >= 0 && !is_std_fd(cmd->fd_in))
+			close_fds_ptr(&cmd->fd_in, NULL);
+		if (redir->type == HEREDOC && !create_heredoc(cmd, redir, shell))
 		{
-			if (cmd->exit_status == 0)//car dans create_heredoc il y a une erreur qui set exit status a 130 et faut pas ecraser ca dans ce cas
+			if (cmd->exit_status == 0)
 				cmd->exit_status = 1;
 			return (false);
 		}

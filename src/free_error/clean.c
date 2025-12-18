@@ -25,5 +25,4 @@ void	clean_exit(t_shell *shell)
 {
 	ft_putstr_fd("exit\n", 1);
 	clean_post_parser(shell);
-	//shell->exit_code = 1;
 }

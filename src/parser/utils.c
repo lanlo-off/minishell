@@ -12,15 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-
-/**
- * @brief Get the file quote type object : Quoted (SUB_SQUOTED ou SUB_DQUOTED) ou Unquoted
- * Sachant qu'il suffit que l'un des subwords soit S ou Dquoted pour que l'ensemble soit quoted
- * Sert a savoir s'il faut expand le contenu du heredoc ensuite (Quoted = non)
- * 
- * @param sub_lst 
- * @return t_sub_type 
- */
 t_sub_type	get_file_quote_type(t_subword *sub_lst)
 {
 	t_subword	*tmp;

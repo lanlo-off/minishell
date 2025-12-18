@@ -12,20 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-/**
- * @brief On expand si type est unquoted uniquement
- * On reutilise la structure et les fonctions du parser
- *
- * @param line
- * @param quote_type
- * @param shell
- * @return char*
- */
-static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
+static char	*expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 {
-	int i;
-	char *res;
-	char *chunk;
+	int		i;
+	char	*res;
+	char	*chunk;
 
 	if (quote_type != SUB_UNQUOTED)
 		return (ft_strdup(line));
@@ -35,111 +26,84 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	{
 		res = append_until_doll(line, &i, res);
 		if (!line[i])
-			break;
+			break ;
 		i++;
-		chunk = expand_var(line, &i, shell); // donc faut recuperer le shell
+		chunk = expand_var(line, &i, shell);
 		res = join_and_free(res, chunk);
 	}
 	return (res);
 }
 
- static int	rl_sigint_hook(void)
- {
-	// printf("je suis dans le hook\n");
-	if (g_signal_received == 67)
+static bool	clear_heredoc(t_shell *shell, int *pipe_write_end, int exitcode)
+{
+	close_fds_ptr(pipe_write_end, NULL);
+	clean_post_parser(shell);
+	clean_shell(shell);
+	exit(exitcode);
+}
+
+static int	check_hd(char *line, t_redir *redir)
+{
+	if (!line)
 	{
-		// printf("Signal recevived 67\n");
-		rl_replace_line("", 0);
-		rl_done = 1;
+		ft_putendl_fd("minishell: warning: here-document delimited \
+					by end-of-file", 2);
+		return (1);
+	}
+	if (ft_strcmp(line, redir->file) == 0)
+	{
+		free(line);
+		return (2);
 	}
 	return (0);
- }
+}
 
-/**
- * @brief Create a heredoc pipe (permet de gerer jusqu'a 1MB de char donc
- * suffisant, pas besoin de creer un doc ?!) Ecris ce qui arrive du here_doc
- * dans le pipefd[1] (cote ecriture) Attribue pipefd[0] en fd_in de la commande
- * en question S'il y a plusieurs here_doc successifs, le fd_in de la commande
- * sera celui du dernier here_doc Verifier capacite de gestion du pipe : cat
- * /proc/sys/fs/pipe-max-size
- *
- * @param cmd
- * @param redir
- * @return true
- * @return false
- */
-static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
+static void	hdoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 {
-	char *line;
-	char *exp_line;
+	char	*line;
+	char	*exp_line;
 
-	signal(SIGINT, heredoc_sigint_handler);
-	signal(SIGQUIT, SIG_IGN);
+	(signal(SIGINT, heredoc_sigint_handler), signal(SIGQUIT, SIG_IGN));
 	rl_event_hook = rl_sigint_hook;
 	while (true)
 	{
 		line = readline(">");
 		if (g_signal_received == 67)
-		{
-			free(line);
-			close_fds_ptr(&pipe_write_end, NULL);
-			clean_post_parser(shell);
-			clean_shell(shell);
-			exit(130);
-		}
-		if (!line)
-		{
-			ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
-			break;
-		}
-		if (ft_strcmp(line, redir->file) == 0)
-		{
-			free(line);
-			break;
-		}
+			(free(line), clear_heredoc(shell, &pipe_write_end, 130));
+		if (check_hd(line, redir) != 0)
+			break ;
 		exp_line = expand_heredoc(line, redir->file_quote_type, shell);
 		free(line);
 		if (!exp_line)
 			exit(EXIT_FAILURE);
-		ft_putendl_fd(exp_line, pipe_write_end);
-		free(exp_line);
+		(ft_putendl_fd(exp_line, pipe_write_end), free(exp_line));
 	}
-	close_fds_ptr(&pipe_write_end, NULL);//close(pipe_write_end);
-	clean_post_parser(shell);
-	clean_shell(shell);
-	exit(EXIT_SUCCESS);
+	clear_heredoc(shell, &pipe_write_end, 1);
 }
 
-bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
+bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 {
-	int pipefd[2];
-	pid_t pid;
-	int status;
+	int		pipefd[2];
+	pid_t	pid;
+	int		status;
 
 	if (pipe(pipefd) == -1)
 		return (print_error(NULL, errno, ERR_PIPE, cmd), false);
 	pid = fork();
 	if (pid == -1)
-		return (print_error(NULL, errno, ERR_FORK, cmd), close_fds_ptr(&pipefd[0], &pipefd[1]), false);//close(pipefd[0]), close(pipefd[1]), false);
+		return (print_error(NULL, errno, ERR_FORK, cmd),
+			close_fds_ptr(&pipefd[0], &pipefd[1]), false);
 	if (pid == 0)
-	{
-		close_fds_ptr(&pipefd[0], NULL);//close(pipefd[0]);
-		heredoc_loop(pipefd[1], redir, shell);
-	}
-	close_fds_ptr(&pipefd[1], NULL);//close(pipefd[1]);
-	signal(SIGINT, SIG_IGN);
-	waitpid(pid, &status, 0);
-	init_signals();
+		(close_fds_ptr(&pipefd[0], NULL), hdoc_loop(pipefd[1], redir, shell));
+	close_fds_ptr(&pipefd[1], NULL);
+	(signal(SIGINT, SIG_IGN), waitpid(pid, &status, 0), init_signals());
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-	{
-		cmd->exit_status = 130;
-		return (close_fds_ptr(&pipefd[0], NULL), false);//close(pipefd[0]), false);
-	}
+		return (cmd->exit_status = 130, close_fds_ptr(&pipefd[0], NULL), false);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		cmd->exit_status = 130;
 		g_signal_received = 130;
-		return (close_fds_ptr(&pipefd[0], NULL), false);//close(pipefd[0]), false);
+		return (close_fds_ptr(&pipefd[0], NULL), false);
 	}
 	cmd->fd_in = pipefd[0];
 	return (true);
