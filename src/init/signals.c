@@ -22,8 +22,10 @@ void init_signals(void)
 void heredoc_sigint_handler(int sig)
 {
 	(void)sig;
-	write(1, "\n", 1);
+	// printf("je suis dans le handler heredoc\n");
 	g_signal_received = 67;
+	write(1, "\n", 1);
+	// exit(130);
 }
 
 void	main_loop_sigint(int sig)

@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 19:05:41 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:49:42 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,15 +43,17 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	return (res);
 }
 
-//  static int	rl_sigint_hook(void)
-//  {
-// 	if (g_signal_received == 67)
-// 	{
-// 		rl_replace_line("", 0);
-// 		rl_done = 1;
-// 	}
-// 	return (0);
-//  }
+ static int	rl_sigint_hook(void)
+ {
+	// printf("je suis dans le hook\n");
+	if (g_signal_received == 67)
+	{
+		// printf("Signal recevived 67\n");
+		rl_replace_line("", 0);
+		rl_done = 1;
+	}
+	return (0);
+ }
 
 /**
  * @brief Create a heredoc pipe (permet de gerer jusqu'a 1MB de char donc
@@ -73,9 +75,18 @@ static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 
 	signal(SIGINT, heredoc_sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
+	rl_event_hook = rl_sigint_hook;
 	while (true)
 	{
 		line = readline(">");
+		if (g_signal_received == 67)
+		{
+			free(line);
+			close_fds_ptr(&pipe_write_end, NULL);
+			clean_post_parser(shell);
+			clean_shell(shell);
+			exit(130);
+		}
 		if (!line)
 		{
 			ft_putendl_fd("minishell: warning: here-document delimited by end-of-file", 2);
@@ -94,6 +105,8 @@ static void heredoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 		free(exp_line);
 	}
 	close_fds_ptr(&pipe_write_end, NULL);//close(pipe_write_end);
+	clean_post_parser(shell);
+	clean_shell(shell);
 	exit(EXIT_SUCCESS);
 }
 

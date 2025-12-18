@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 15:13:22 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/18 09:24:38 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,8 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst);
 bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
 
 /*loop.c*/
-int		infinite_loop(t_shell *shell);
+int infinite_loop(t_shell *shell);
+
 
 /*redir.c*/
 bool	is_std_fd(int fd);
