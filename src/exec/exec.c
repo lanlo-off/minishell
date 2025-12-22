@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 17:52:50 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:38:43 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return (true);
+	(pipefd[0] = -1, pipefd[1] = -1);
 	cmd = cmd_lst;
 	if (!cmd->next && !cmd->prev)
 		return (handle_single_cmd(cmd, shell));
@@ -118,7 +119,7 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 	{
 		if (!set_normal_fds(cmd, pipefd))
 			return (false);
-		if (!handle_redir_in(cmd, cmd->redirs_in, shell)
+		if (!handle_redir_in(cmd, cmd->redirs_in, shell, pipefd)
 			|| !handle_redir_out(cmd, cmd->redirs_out) || !check_cmd(cmd)
 			|| !do_cmd(cmd, shell, pipefd))
 		{

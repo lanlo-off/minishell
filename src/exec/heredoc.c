@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/18 09:49:42 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/22 19:39:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ static char	*expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	return (res);
 }
 
-static bool	clear_heredoc(t_shell *shell, int *pipe_write_end, int exitcode)
+static bool	clear_heredoc(t_shell *shell, int *pipe_write_end, int exitcode, int pipefd[2])
 {
+	if (pipefd)
+		close_fds_ptr(&pipefd[0], &pipefd[1]);
 	close_fds_ptr(pipe_write_end, NULL);
 	clean_post_parser(shell);
 	clean_shell(shell);
@@ -58,7 +60,7 @@ static int	check_hd(char *line, t_redir *redir)
 	return (0);
 }
 
-static void	hdoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
+static void	hdoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell, int pipefd[2])
 {
 	char	*line;
 	char	*exp_line;
@@ -69,7 +71,7 @@ static void	hdoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 	{
 		line = readline(">");
 		if (g_signal_received == 67)
-			(free(line), clear_heredoc(shell, &pipe_write_end, 130));
+			(free(line), clear_heredoc(shell, &pipe_write_end, 130, pipefd));
 		if (check_hd(line, redir) != 0)
 			break ;
 		exp_line = expand_heredoc(line, redir->file_quote_type, shell);
@@ -78,33 +80,33 @@ static void	hdoc_loop(int pipe_write_end, t_redir *redir, t_shell *shell)
 			exit(EXIT_FAILURE);
 		(ft_putendl_fd(exp_line, pipe_write_end), free(exp_line));
 	}
-	clear_heredoc(shell, &pipe_write_end, 1);
+	clear_heredoc(shell, &pipe_write_end, 1, pipefd);
 }
 
-bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
+bool	create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell, int pipefd[2])
 {
-	int		pipefd[2];
+	int		pipefd_hd[2];
 	pid_t	pid;
 	int		status;
 
-	if (pipe(pipefd) == -1)
+	if (pipe(pipefd_hd) == -1)
 		return (print_error(NULL, errno, ERR_PIPE, cmd), false);
 	pid = fork();
 	if (pid == -1)
 		return (print_error(NULL, errno, ERR_FORK, cmd),
-			close_fds_ptr(&pipefd[0], &pipefd[1]), false);
+			close_fds_ptr(&pipefd_hd[0], &pipefd_hd[1]), false);
 	if (pid == 0)
-		(close_fds_ptr(&pipefd[0], NULL), hdoc_loop(pipefd[1], redir, shell));
-	close_fds_ptr(&pipefd[1], NULL);
+		(close_fds_ptr(&pipefd_hd[0], NULL), hdoc_loop(pipefd_hd[1], redir, shell, pipefd));
+	close_fds_ptr(&pipefd_hd[1], NULL);
 	(signal(SIGINT, SIG_IGN), waitpid(pid, &status, 0), init_signals());
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
-		return (cmd->exit_status = 130, close_fds_ptr(&pipefd[0], NULL), false);
+		return (cmd->exit_status = 130, close_fds_ptr(&pipefd_hd[0], NULL), false);
 	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
 	{
 		cmd->exit_status = 130;
 		g_signal_received = 130;
-		return (close_fds_ptr(&pipefd[0], NULL), false);
+		return (close_fds_ptr(&pipefd_hd[0], NULL), false);
 	}
-	cmd->fd_in = pipefd[0];
+	cmd->fd_in = pipefd_hd[0];
 	return (true);
 }

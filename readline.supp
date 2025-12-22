@@ -32,3 +32,34 @@
    ...
    fun:history_expand
 }
+
+{
+   readline_internal_leak
+   Memcheck:Leak
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:readline
+}
+
+{
+   readline_reachable_obj
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   history_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:add_history
+}

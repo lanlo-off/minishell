@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/18 09:24:38 by llechert         ###   ########.fr       */
+/*   Updated: 2025/12/22 18:34:00 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void		exec_cmd(t_cmd *cmd, char **envp, t_shell *shell);
 bool		execution(t_shell *shell, t_cmd *cmd_lst);
 
 /*here_doc.c*/
-bool		create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell);
+bool		create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell, int pipefd[2]);
 
 /*loop.c*/
 int			infinite_loop(t_shell *shell);
@@ -156,7 +156,7 @@ bool		is_std_fd(int fd);
 int			open_outfile(char *file, t_token_type type, t_cmd *cmd);
 bool		handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
 int			open_infile(char *file, t_cmd *cmd);
-bool		handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell);
+bool		handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell, int pipefd[2]);
 
 /*single_cmd_utils.c*/
 void		single_builtin(t_cmd *cmd, int saved_in, int saved_out,
