@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/22 18:34:00 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 15:22:49 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ extern int	g_signal_received;
 
 /*=============== OTHERS =============== */
 # define PATH_MAX 4096
+# define HD_FILE ".heredoc_tmp"
 
 /*=============== INIT =============== */
 /*init.c*/
@@ -138,15 +139,18 @@ void		prepare_next_loop(t_shell *shell);
 bool		check_cmd(t_cmd *cmd);
 bool		is_builtin(t_cmd *cmd);
 int			exec_builtin(t_cmd *cmd, t_shell *shell);
-void		close_fds(int fd_in, int fd_out);
 void		close_fds_ptr(int *fd_in, int *fd_out);
 
 /*exec.c*/
 void		exec_cmd(t_cmd *cmd, char **envp, t_shell *shell);
 bool		execution(t_shell *shell, t_cmd *cmd_lst);
 
-/*here_doc.c*/
-bool		create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell, int pipefd[2]);
+/*heredoc.c*/
+bool		create_all_heredocs(t_shell *shell, t_cmd *cmd_lst);
+int			check_hd(char *line, t_redir *redir);
+void		close_hd_fds(t_shell *shell);
+
+
 
 /*loop.c*/
 int			infinite_loop(t_shell *shell);
@@ -156,13 +160,13 @@ bool		is_std_fd(int fd);
 int			open_outfile(char *file, t_token_type type, t_cmd *cmd);
 bool		handle_redir_out(t_cmd *cmd, t_redir *redir_lst);
 int			open_infile(char *file, t_cmd *cmd);
-bool		handle_redir_in(t_cmd *cmd, t_redir *redir_lst, t_shell *shell, int pipefd[2]);
+bool		handle_redir_in(t_cmd *cmd, t_redir *redir_lst);
 
 /*single_cmd_utils.c*/
 void		single_builtin(t_cmd *cmd, int saved_in, int saved_out,
 				t_shell *shell);
 bool		fork_single_cmd(t_cmd *cmd, t_shell *shell);
-bool		handle_fds_single_cmd(t_cmd *cmd, t_shell *shell);
+bool		handle_fds_single_cmd(t_cmd *cmd);
 
 /*utils*/
 int			check_args(char **av, int nbArgs);

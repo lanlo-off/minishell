@@ -6,17 +6,17 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/15 13:14:29 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/22 18:40:19 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 14:22:30 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-bool	handle_fds_single_cmd(t_cmd *cmd, t_shell *shell)
+bool	handle_fds_single_cmd(t_cmd *cmd)//, t_shell *shell)
 {
 	cmd->fd_in = STDIN_FILENO;
 	cmd->fd_out = STDOUT_FILENO;
-	if (!handle_redir_in(cmd, cmd->redirs_in, shell, NULL))
+	if (!handle_redir_in(cmd, cmd->redirs_in))//, shell, NULL))
 		return (false);
 	if (!handle_redir_out(cmd, cmd->redirs_out))
 		return (false);

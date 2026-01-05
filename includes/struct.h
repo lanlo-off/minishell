@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:11 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/16 16:57:47 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 13:22:53 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ struct						s_redir
 {
 	t_token_type			type;
 	char					*file;
+	int						hd_fd;
 	t_sub_type				file_quote_type;
 	t_redir					*next;
 };

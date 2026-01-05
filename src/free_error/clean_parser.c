@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 18:05:29 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 14:13:25 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static void	clean_redir_cmd(t_redir *redirs)
 		tmp = redirs;
 		redirs = redirs->next;
 		free(tmp->file);
+		// close_fds_ptr(&tmp->hd_fd, NULL);//a priori pas necessaire mais si on l'utilise attention ca sous-entend qu'on les a fixes a -1 quand on les envoie sur fd_in
 		free(tmp);
 	}
 	free(redirs->file);

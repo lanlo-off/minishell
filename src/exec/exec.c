@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 11:31:19 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 15:01:11 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static bool	handle_single_cmd(t_cmd *cmd, t_shell *shell)
 	saved_stdout = 0;
 	if (!cmd)
 		return (true);
-	if (!handle_fds_single_cmd(cmd, shell))
+	if (!handle_fds_single_cmd(cmd))//, shell))
 		return (false);
 	if (!is_builtin(cmd))
 		return (fork_single_cmd(cmd, shell));
@@ -109,15 +109,16 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return (true);
-	(pipefd[0] = -1, pipefd[1] = -1);
-	cmd = cmd_lst;
+	(pipefd[0] = -1, pipefd[1] = -1, cmd = cmd_lst);
+	if (!create_all_heredocs(shell, cmd_lst))//, pipefd))
+		return (false);
 	if (!cmd->next && !cmd->prev)
 		return (handle_single_cmd(cmd, shell));
 	while (cmd)
 	{
 		if (!set_normal_fds(cmd, pipefd))
 			return (false);
-		if (!handle_redir_in(cmd, cmd->redirs_in, shell, pipefd)
+		if (!handle_redir_in(cmd, cmd->redirs_in)
 			|| !handle_redir_out(cmd, cmd->redirs_out) || !check_cmd(cmd)
 			|| !do_cmd(cmd, shell, pipefd))
 		{

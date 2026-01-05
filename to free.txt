@@ -27,7 +27,8 @@ A free pour passer a la boucle suivante :
 		i- char **av liste des arguments
 			a- char* chaque argument de la liste
 		ii- t_redir* liste chainee des redirections
-			a- char* fichier de redirection
+			a- char* file de redirection
+			b- int hd_fd si c'est un heredoc on y met le fd associe (le champ file est pour le limiter dans ce cas)
 
 
 #####POST-EXEC##### --> on fait cette etape en fin de boucle anyway (?)

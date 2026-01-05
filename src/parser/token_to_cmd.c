@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/03 13:34:09 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/17 15:12:34 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 14:13:58 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static bool	handle_redir_in_token(t_token *token, t_cmd *cmd, t_shell *shell)
 	new_redir->type = token->type;
 	new_redir->file_quote_type = get_file_quote_type(token->next->subword);
 	new_redir->file = concat_expand_token(token->next->subword, shell);
+	new_redir->hd_fd = -1;
 	if (!cmd->redirs_in)
 		cmd->redirs_in = new_redir;
 	else
@@ -71,6 +72,7 @@ static bool	handle_redir_out_token(t_token *token, t_cmd *cmd, t_shell *shell)
 		return (false);
 	new_redir->type = token->type;
 	new_redir->file = concat_expand_token(token->next->subword, shell);
+	new_redir->hd_fd = -1;
 	if (!cmd->redirs_out)
 		cmd->redirs_out = new_redir;
 	else

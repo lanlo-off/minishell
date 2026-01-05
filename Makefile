@@ -16,6 +16,7 @@ SRCS += src/exec/loop.c\
 	src/exec/built-in/export2.c\
 	src/exec/built-in/unset.c\
 	src/exec/heredoc.c\
+	src/exec/heredoc2.c\
 	src/exec/single_cmd_utils.c
 
 SRCS += src/free_error/clean_lexer.c\
