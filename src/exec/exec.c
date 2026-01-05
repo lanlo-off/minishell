@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/22 18:38:43 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 11:31:19 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	set_normal_fds(t_cmd *cmd, int pipefd[2])
 {
-	if (!cmd->prev && !cmd->next)
+	if (!cmd->prev && !cmd->next)//inutile car signifie cmd unique et si cmd unique on passe pas ici
 	{
 		cmd->fd_in = STDIN_FILENO;
 		cmd->fd_out = STDOUT_FILENO;
@@ -74,12 +74,10 @@ bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 	}
 	else
 	{
-		if (pipefd[1] >= 0 && !is_std_fd(pipefd[1]))
-			close_fds_ptr(&pipefd[1], NULL);
+		close_fds_ptr(&pipefd[1], NULL);
 		if (cmd->prev && cmd->prev->fd_out != STDOUT_FILENO)
 			close_fds_ptr(&cmd->prev->fd_out, NULL);
-		if (cmd->fd_in >= 0 && cmd->fd_in != STDIN_FILENO)
-			close_fds_ptr(&cmd->fd_in, NULL);
+		close_fds_ptr(&cmd->fd_in, NULL);
 		if (cmd->next)
 			cmd->fd_out = pipefd[0];
 		return (true);
@@ -128,5 +126,6 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 		}
 		cmd = cmd->next;
 	}
+	close_fds_ptr(&pipefd[0], &pipefd[1]);
 	return (true);
 }

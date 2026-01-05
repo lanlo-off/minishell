@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2025/12/22 19:39:11 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 10:25:24 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ static int	check_hd(char *line, t_redir *redir)
 {
 	if (!line)
 	{
-		ft_putendl_fd("minishell: warning: here-document delimited \
-					by end-of-file", 2);
+		ft_putstr_fd("minishell: warning: here-document delimited", 2);
+		ft_putendl_fd("by end-of-file", 2);
 		return (1);
 	}
 	if (ft_strcmp(line, redir->file) == 0)
