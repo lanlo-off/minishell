@@ -1,8 +1,8 @@
 #executables
 minishell
 
-#pipex
-2.1*
+#utils_ignore
+utils_ignore
 
 # Prerequisites
 *.d

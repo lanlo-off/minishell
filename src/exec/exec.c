@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 15:01:11 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 16:06:34 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static bool	set_normal_fds(t_cmd *cmd, int pipefd[2])
 {
-	if (!cmd->prev && !cmd->next)//inutile car signifie cmd unique et si cmd unique on passe pas ici
+	if (!cmd->prev && !cmd->next)
 	{
 		cmd->fd_in = STDIN_FILENO;
 		cmd->fd_out = STDOUT_FILENO;
@@ -93,7 +93,7 @@ static bool	handle_single_cmd(t_cmd *cmd, t_shell *shell)
 	saved_stdout = 0;
 	if (!cmd)
 		return (true);
-	if (!handle_fds_single_cmd(cmd))//, shell))
+	if (!handle_fds_single_cmd(cmd))
 		return (false);
 	if (!is_builtin(cmd))
 		return (fork_single_cmd(cmd, shell));
@@ -109,8 +109,8 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return (true);
-	(pipefd[0] = -1, pipefd[1] = -1, cmd = cmd_lst);
-	if (!create_all_heredocs(shell, cmd_lst))//, pipefd))
+	init_value(cmd, cmd_lst, &pipefd[0], &pipefd[1]);
+	if (!create_all_heredocs(shell, cmd_lst))
 		return (false);
 	if (!cmd->next && !cmd->prev)
 		return (handle_single_cmd(cmd, shell));
@@ -127,6 +127,5 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 		}
 		cmd = cmd->next;
 	}
-	close_fds_ptr(&pipefd[0], &pipefd[1]);
-	return (true);
+	return (close_fds_ptr(&pipefd[0], &pipefd[1]), true);
 }

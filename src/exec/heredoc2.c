@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 15:22:11 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 15:44:15 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	close_hd_fds(t_shell *shell)
 			redir_tmp = cmd_tmp->redirs_in;
 			while (redir_tmp)
 			{
-				close_fds_ptr(&redir_tmp->hd_fd, NULL);//qui est a -1 si pas un heredoc ou pas encore assigne
+				close_fds_ptr(&redir_tmp->hd_fd, NULL);
 				redir_tmp = redir_tmp->next;
 			}
 		}

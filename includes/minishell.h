@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/20 16:01:15 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 15:22:49 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 16:11:48 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,6 @@ bool		create_all_heredocs(t_shell *shell, t_cmd *cmd_lst);
 int			check_hd(char *line, t_redir *redir);
 void		close_hd_fds(t_shell *shell);
 
-
-
 /*loop.c*/
 int			infinite_loop(t_shell *shell);
 
@@ -171,6 +169,7 @@ bool		handle_fds_single_cmd(t_cmd *cmd);
 /*utils*/
 int			check_args(char **av, int nbArgs);
 int			rl_sigint_hook(void);
+void		init_value(t_cmd *cmd, t_cmd *cmd_lst, int *pipe_0, int *pipe_1);
 
 /*=============== FREE_ERROR =============== */
 

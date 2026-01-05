@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 17:14:26 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 15:11:20 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 15:44:54 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ bool	handle_redir_in(t_cmd *cmd, t_redir *redir_lst)
 		if (redir->type == HEREDOC)
 		{
 			cmd->fd_in = redir->hd_fd;
-			redir->hd_fd = -1;//pour eviter les doubles close on ne closera plus que cmd->fd_in a partir de maintenant
+			redir->hd_fd = -1;
 		}
 		else if (redir->type == REDIR_IN)
 		{

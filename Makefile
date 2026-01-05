@@ -1,5 +1,4 @@
-SRCS = src/main.c\
-	src/print_token.c
+SRCS = src/main.c
 
 SRCS += src/exec/loop.c\
 	src/exec/clean_loop.c\
@@ -59,10 +58,6 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -g3
 
 LIBFT = libft/libft.a
-
-#valgrind-clean: $(NAME)
-#	@echo "=== Valgrind without readline leaks ==="
-#	-valgrind --leak-check=full --show-leak-kinds=all --track-fds=yes --trace-children=yes --track-origins=yes --suppressions=readline.supp ./$(NAME)
 
 all: $(NAME)
 

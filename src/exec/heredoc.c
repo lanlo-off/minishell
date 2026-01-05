@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/10 11:32:32 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 15:16:02 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/05 16:09:58 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
  * @param shell
  * @return char*
  */
-static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
+static char	*expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 {
-	int i;
-	char *res;
-	char *chunk;
+	int		i;
+	char	*res;
+	char	*chunk;
 
 	if (quote_type != SUB_UNQUOTED)
 		return (ft_strdup(line));
@@ -35,7 +35,7 @@ static char *expand_heredoc(char *line, t_sub_type quote_type, t_shell *shell)
 	{
 		res = append_until_doll(line, &i, res);
 		if (!line[i])
-			break;
+			break ;
 		i++;
 		chunk = expand_var(line, &i, shell);
 		res = join_and_free(res, chunk);
@@ -52,20 +52,7 @@ static bool	clear_heredoc(t_shell *shell, int *fd_out, int exitcode)
 	exit(exitcode);
 }
 
-/**
- * @brief Create a heredoc pipe (permet de gerer jusqu'a 1MB de char donc
- * suffisant, pas besoin de creer un doc ?!) Ecris ce qui arrive du here_doc
- * dans le pipefd[1] (cote ecriture) Attribue pipefd[0] en fd_in de la commande
- * en question S'il y a plusieurs here_doc successifs, le fd_in de la commande
- * sera celui du dernier here_doc Verifier capacite de gestion du pipe : cat
- * /proc/sys/fs/pipe-max-size
- *
- * @param cmd
- * @param redir
- * @return true
- * @return false
- */
-static void heredoc_loop(int fd_out, t_redir *redir, t_shell *shell)
+static void	heredoc_loop(int fd_out, t_redir *redir, t_shell *shell)
 {
 	char	*line;
 	char	*exp_line;
@@ -88,7 +75,7 @@ static void heredoc_loop(int fd_out, t_redir *redir, t_shell *shell)
 	clear_heredoc(shell, &fd_out, 1);
 }
 
-static bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
+static bool	create_hd(t_cmd *cmd, t_redir *redir, t_shell *shell)
 {
 	int		fd;
 	pid_t	pid;
@@ -102,14 +89,14 @@ static bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 		return (close(fd), print_error(NULL, errno, ERR_FORK, cmd), false);
 	if (pid == 0)
 		heredoc_loop(fd, redir, shell);
-	close(fd); // On ferme l'accès en écriture (on va l'ouvrir en lecture bientot)
+	close(fd);
 	signal(SIGINT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	init_signals();
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 		return (unlink(HD_FILE), cmd->exit_status = 130, false);
 	redir->hd_fd = open(HD_FILE, O_RDONLY);
-	unlink(HD_FILE);// 3. IMPORTANT : On unlink immédiatement mais le fichier est marqué pour suppression, mais reste accessible tant que redir->hd_fd est ouvert. On le closera plus tard dans la loop de redirection ou apres la commande
+	unlink(HD_FILE);
 	if (redir->hd_fd == -1)
 		return (print_error(HD_FILE, errno, ERR_REDIR, cmd), false);
 	return (true);
@@ -118,23 +105,23 @@ static bool create_heredoc(t_cmd *cmd, t_redir *redir, t_shell *shell)
 bool	create_all_heredocs(t_shell *shell, t_cmd *cmd_lst)
 {
 	t_cmd	*cmd;
-	t_redir	*redir_tmp;
+	t_redir	*redir;
 
 	cmd = cmd_lst;
 	while (cmd)
 	{
 		if (cmd->redirs_in)
 		{
-			redir_tmp = cmd->redirs_in;
-			while (redir_tmp)
+			redir = cmd->redirs_in;
+			while (redir)
 			{
-				if (redir_tmp->type == HEREDOC && !create_heredoc(cmd, redir_tmp, shell))
+				if (redir->type == HEREDOC && !create_hd(cmd, redir, shell))
 				{
 					if (cmd->exit_status == 0)
 						cmd->exit_status = 1;
 					return (false);
 				}
-				redir_tmp = redir_tmp->next;
+				redir = redir->next;
 			}
 		}
 		cmd = cmd->next;

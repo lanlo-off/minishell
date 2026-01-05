@@ -1,4 +1,0 @@
-alias vg='valgrind'
-alias vgall='valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes'
-alias vgfull='valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes --track-origins=yes'
-alias vgrl='valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --track-fds=yes --track-origins=yes --suppressions=./readline.supp'
