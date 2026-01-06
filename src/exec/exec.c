@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 16:55:40 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 16:06:34 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/06 14:08:37 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ bool	do_cmd(t_cmd *cmd, t_shell *shell, int pipefd[2])
 		(dup2(cmd->fd_in, STDIN_FILENO), dup2(cmd->fd_out, STDOUT_FILENO));
 		close_fds_ptr(&pipefd[0], &pipefd[1]);
 		close_fds_ptr(&cmd->fd_in, &cmd->fd_out);
+		close_hd_fds(shell);
 		exec_cmd(cmd, shell->envp, shell);
 		return (false);
 	}
@@ -109,7 +110,8 @@ bool	execution(t_shell *shell, t_cmd *cmd_lst)
 
 	if (!cmd_lst)
 		return (true);
-	init_value(cmd, cmd_lst, &pipefd[0], &pipefd[1]);
+	cmd = cmd_lst;
+	init_value(&pipefd[0], &pipefd[1]);
 	if (!create_all_heredocs(shell, cmd_lst))
 		return (false);
 	if (!cmd->next && !cmd->prev)

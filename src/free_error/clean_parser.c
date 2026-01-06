@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/04 13:30:55 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 16:10:27 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/06 14:16:07 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,11 @@ static void	clean_redir_cmd(t_redir *redirs)
 		tmp = redirs;
 		redirs = redirs->next;
 		free(tmp->file);
+		close_fds_ptr(&tmp->hd_fd, NULL);
 		free(tmp);
 	}
 	free(redirs->file);
+	close_fds_ptr(&redirs->hd_fd, NULL);
 	free(redirs);
 }
 

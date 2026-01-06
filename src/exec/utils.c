@@ -6,7 +6,7 @@
 /*   By: llechert <llechert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/22 18:25:59 by llechert          #+#    #+#             */
-/*   Updated: 2026/01/05 16:07:03 by llechert         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:16:31 by llechert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ int	rl_sigint_hook(void)
 	return (0);
 }
 
-void	init_value(t_cmd *cmd, t_cmd *cmd_lst, int *pipe_0, int *pipe_1)
+void	init_value(int *pipe_0, int *pipe_1)
 {
-	cmd = cmd_lst;
 	*pipe_0 = -1;
 	*pipe_1 = -1;
 }
